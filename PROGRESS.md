@@ -63,13 +63,15 @@
 - Other pages (dashboard, history, log, review, settings) remain as empty placeholders for now.
 - Verified that the frontend builds successfully and linting passes (except for one minor rule about exporting hook from context, which is acceptable).
 
-## Step 6: App shell
-- Create layout component with fixed bottom nav bar (5 items: Dashboard, History, Log, Review, Settings).
-- Implement swipe deck for the five main pages (using Swiper.js or CSS scroll-snap or custom touch handler).
-- Ensure URL and nav tab sync with current slide (using useEffect and history.listen).
-- Pages stay mounted while sliding; use context or state sharing to keep data fresh (e.g., History updates when new transaction added via Log).
-- Respect prefers-reduced-motion (fade or instant switch).
-- Desktop: nav clicks slide, left/right arrow keys change slides when not in form field.
+## Step 6: App shell (Completed)
+- Created layout component with fixed bottom nav bar using CSS scroll-snap for swipe deck.
+- Implemented NavBar component with icons from lucide-react.
+- Ensured URL and nav bar sync with current page using useParams and useEffect to update URL on page change and vice versa.
+- Pages stay mounted in the DOM (they are rendered in a flex container).
+- Respects prefers-reduced-motion by using auto scroll behavior when reduced motion is preferred.
+- Desktop: nav clicks change page, left/right arrow keys change slides when not in an input or textarea.
+- Added resize observer to handle window resizing.
+- Verified that the layout works and the app builds successfully.
 
 ## Step 7: Log page
 - Toggle for Expense/Income at top.

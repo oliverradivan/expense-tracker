@@ -154,6 +154,7 @@ async def delete_account_endpoint(
     password: str = Form(...),
     user_info: dict = Depends(get_current_user_from_cookie)
 ):
+    logger.info(f"Delete account called for user_id: {user_info['id']}")
     try:
         success = delete_account(user_info["id"], password)
         if success:
