@@ -1,16 +1,71 @@
-# React + Vite
+# Expense Tracker
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A full-stack expense tracker application built with:
 
-Currently, two official plugins are available:
+- Frontend: React, Vite, React Router
+- Backend: Python, FastAPI, Supabase
+- Database: Supabase (PostgreSQL)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Setup
 
-## React Compiler
+### Backend
+1. Navigate to the `backend` directory.
+2. Create a virtual environment using `uv` (or venv):
+   ```bash
+   uv venv
+   source .venv/bin/activate
+   ```
+3. Install dependencies:
+   ```bash
+   uv pip install -r requirements.txt
+   ```
+4. Ensure the `.env` file is present with the following variables:
+   - SUPABASE_URL
+   - SUPABASE_SECRET_KEY
+   - JWT_SECRET
+   - ALLOWED_ORIGINS
+   - APP_ENV
+5. Start the backend server:
+   ```bash
+   uv uvicorn backend.main:app --host 0.0.0.0 --port 8000
+   ```
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### Frontend
+1. Navigate to the `frontend` directory.
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Start the development server:
+   ```bash
+   npm run dev
+   ```
+4. The frontend will be available at http://localhost:5173
 
-## Expanding the ESLint configuration
+## Features
+- User authentication (register, login, logout, change password, delete account)
+- Transaction logging (income and expenses)
+- Transaction history with grouping by month and category
+- Settings page with theme toggle (light/dark)
+- Responsive design with swipe deck for mobile devices
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Security
+- Passwords are hashed using bcrypt with SHA-256 fallback for long passwords.
+- JWT tokens are used for authentication with token_version for session invalidation.
+- All API endpoints require authentication via httpOnly cookies.
+- Rate limiting on auth endpoints to prevent brute force attacks.
+- Input validation and sanitization on all endpoints.
+- SQL injection prevention via Supabase parameterized queries.
+- CORS restricted to allowed origins.
+- Security headers (X-Content-Type-Options, X-Frame-Options, Referrer-Policy, Cache-Control).
+
+## Unfinished or Risky Items
+- The Month in Review (analysis) page is a placeholder and not yet implemented.
+- The swipe deck implementation uses CSS scroll-snap, which may not provide the same swipe experience as a dedicated swipe library on all devices.
+- The application has not been tested extensively in production-like environments.
+- Theme persistence relies on localStorage, which may be cleared by the user or browser.
+
+## Notes
+- The backend uses a real Supabase instance; ensure the .env file contains valid credentials.
+- The frontend proxies API requests to the backend via relative URLs (same origin).
+- The application is intended for personal use and should be deployed in a secure environment.

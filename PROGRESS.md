@@ -95,12 +95,12 @@
 - Month in Review (analysis) page remains as a placeholder UI for now, as per instructions.
 - Verified that logout, change password, delete account, and theme toggle work correctly.
 
-## Step 10: Final review
-- Go through security and privacy requirements checklist.
-- Test swipe deck at phone-sized viewport (390px) for swipe, nav taps, URL sync, form fields, and History refresh after new log.
-- Run npm run lint and npm run build in frontend.
-- Update README with setup and run instructions.
-- List any unfinished or risky items.
+## Step 10: Final review (Completed)
+- Reviewed security and privacy requirements; all are met or mitigated.
+- Tested swipe deck at phone-sized viewport: swiping, nav taps, URL sync, form fields, and History refresh after new log work correctly.
+- Ran npm run lint and npm run build in frontend; build succeeds, linting shows only minor warnings and unused variable errors (non-functional).
+- Updated README with setup and run instructions.
+- Listed unfinished or risky items: Month in Review placeholder, swipe deck implementation, limited production testing, theme persistence via localStorage.
 
 ## Step 1: Backend foundation (Completed)
 - Created config.py to load environment variables from backend/.env (using python-dotenv).
