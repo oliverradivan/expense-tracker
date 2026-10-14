@@ -30,11 +30,14 @@
 - Tested with multiple users, verified cross-user isolation, validation, and rate limiting.
 - Updated cookies are set with httpOnly, SameSite=Lax, secure=False (for development).
 
-## Step 3: Backend transactions and categories
-- GET /categories: return static categories (expense: subscription, apartment, grocery, other; income: job, maanak, gift, other).
-- POST /transactions: validate input (type, category matching type, label, amount, date), insert with user_id from token.
-- GET /transactions: optional query params month (YYYY-MM) and type, return list for user.
-- DELETE /transactions/{id}: verify ownership, delete.
+## Step 3: Backend transactions and categories (Completed)
+- Implemented GET /categories returning static categories.
+- Implemented POST /transactions with validation (type, category matching type, label length 1-100, amount > 0 and max 2 decimals, date format).
+- Implemented GET /transactions with optional month (YYYY-MM) and type filters.
+- Implemented DELETE /transactions/{id} with ownership verification.
+- All transactions endpoints require authentication via httpOnly cookie.
+- Tested: categories, create transaction, get transactions (with and without filters), delete transaction.
+- Verified validation and error handling.
 
 ## Step 4: Backend verification
 - Write a test script that uses the real backend (running locally) to:
