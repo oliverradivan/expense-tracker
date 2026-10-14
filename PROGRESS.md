@@ -83,3 +83,11 @@
 - Run npm run lint and npm run build in frontend.
 - Update README with setup and run instructions.
 - List any unfinished or risky items.
+
+## Step 1: Backend foundation (Completed)
+- Created config.py to load environment variables from backend/.env (using python-dotenv).
+- Created data/supabase.py to initialize Supabase client with the service role key (upgraded supabase to 2.32.0 to support sb_secret_ keys).
+- Created services/security.py for password hashing (bcrypt) and JWT handling (PyJWT) with token_version claim.
+- Updated main.py with FastAPI app, CORS (from ALLOWED_ORIGINS), security headers (X-Content-Type-Options, X-Frame-Options, Referrer-Policy, Cache-Control), rate limiting (slowapi) on auth endpoints, and health check endpoint.
+- Updated requirements.txt with pinned versions: fastapi==0.104.1, uvicorn[standard]==0.27.0, supabase==2.32.0, python-dotenv==1.0.1, bcrypt==4.1.2, PyJWT==2.15.1, slowapi==0.1.8.
+- Verified that the backend can start and basic components work (imports, password hashing, token creation/verification).
