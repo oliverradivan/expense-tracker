@@ -64,7 +64,7 @@ if APP_ENV != "development":
 # Health check endpoint
 @app.get("/health")
 async def health_check():
-    return {"status": "ok", "timestamp": time.time()}
+    return {"status": "ok", "note": "test", "timestamp": time.time()}
 
 # Global exception handler to avoid leaking stack traces
 @app.exception_handler(Exception)
@@ -76,7 +76,7 @@ async def global_exception_handler(request: Request, exc: Exception):
     )
 
 # Import and include routers
-# We'll import them after they are created
-# from backend.routers import auth, transactions
-# app.include_router(auth.router, prefix="/auth", tags=["auth"])
-# app.include_router(transactions.router, prefix="/transactions", tags=["transactions"])
+from backend.routers import auth, transactions
+
+app.include_router(auth.router, prefix="", tags=["auth"])
+app.include_router(transactions.router, prefix="/transactions", tags=["transactions"])

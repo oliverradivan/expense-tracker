@@ -18,14 +18,17 @@
 - Add health check endpoint.
 - Update requirements.txt with pinned versions.
 
-## Step 2: Backend auth
-- Implement endpoints: POST /auth/register, POST /auth/login, POST /auth/logout, GET /auth/me, POST /auth/change-password, DELETE /auth/me.
-- Register: validate username (3-30, alphanumeric/underscore), password (6-128 chars), hash password, insert user, return JWT token (httpOnly cookie or header).
-- Login: verify credentials (dummy hash if user not exists to prevent timing attack), check token_version, issue new JWT.
-- Logout: clear token (if cookie) or instruct client to remove token.
-- Me: return user info (excluding password hash) from verified token.
-- Change password: validate current password, set new password hash, increment token_version.
-- Delete account: verify password, delete user (cascade deletes transactions due to ON DELETE CASCADE).
+## Step 2: Backend auth (Completed)
+- Implemented endpoints: POST /auth/register, POST /auth/login, POST /auth/logout, GET /auth/me, POST /auth/change-password, DELETE /auth/me.
+- Register: validates username (3-30, alphanumeric/underscore), password (6-128 chars), hashes password (bcrypt with SHA-256 fallback for >72 bytes), inserts user, returns JWT token in httpOnly cookie.
+- Login: verifies credentials (uses dummy hash for non-existent users to prevent timing attack), checks token_version, issues new JWT.
+- Logout: clears the httpOnly cookie.
+- Me: returns user info (id, username) from verified token.
+- Change password: validates current password, sets new password hash, increments token_version, issues new token.
+- Delete account: verifies password, deletes user (cascade deletes transactions).
+- All endpoints are protected by rate limiting (5/minute) to prevent brute force.
+- Tested with multiple users, verified cross-user isolation, validation, and rate limiting.
+- Updated cookies are set with httpOnly, SameSite=Lax, secure=False (for development).
 
 ## Step 3: Backend transactions and categories
 - GET /categories: return static categories (expense: subscription, apartment, grocery, other; income: job, maanak, gift, other).
