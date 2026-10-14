@@ -39,14 +39,17 @@
 - Tested: categories, create transaction, get transactions (with and without filters), delete transaction.
 - Verified validation and error handling.
 
-## Step 4: Backend verification
-- Write a test script that uses the real backend (running locally) to:
-  - Create two test users.
-  - Attempt cross-user access (should fail).
-  - Test validation (invalid inputs).
-  - Test rate limiting on auth endpoints.
-  - Clean up test users and data.
-- Fix any bugs found.
+## Step 4: Backend verification (Completed)
+- Wrote and ran a verification script that:
+  * Created two test users with random suffixes.
+  * Verified cross-user isolation: each user can only see their own transactions.
+  * Tested validation: invalid type, negative amount, overly long label all return 400.
+  * Tested rate limiting: exceeded limit of 5 login attempts per minute returns 429.
+  * Verified cleanup: after account deletion, users cannot access protected endpoints.
+- Fixed bugs found:
+  * The get_current_user service was raising an unhandled APIError when a user was deleted (due to .single() on empty result). Added proper error handling to raise ValueError("User not found").
+  * The delete account endpoint was working correctly; the issue was in the get_current_user function.
+- All tests passed.
 
 ## Step 5: Frontend foundation
 - Set up react-router-dom for routes: /login, /register, /dashboard, /history, /log, /review, /settings.

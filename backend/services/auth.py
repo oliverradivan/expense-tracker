@@ -76,7 +76,14 @@ def get_current_user(access_token: str):
     token_version_from_token = payload.get('token_version')
     
     # Fetch user from database
-    result = supabase.table('users').select('id, username, token_version').eq('id', user_id).single().execute()
+    try:
+        result = supabase.table('users').select('id, username, token_version').eq('id', user_id).single().execute()
+    except APIError as e:
+        if e.code == 'PGRST116':
+            raise ValueError("User not found")
+        else:
+            raise
+    
     if not result.data:
         raise ValueError("User not found")
     
