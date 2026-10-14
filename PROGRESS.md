@@ -90,9 +90,10 @@
 - Showed empty state when no transactions.
 - Verified that the page loads, displays transactions correctly, and allows deletion.
 
-## Step 9: Settings and Month in Review placeholder
-- Settings: Logout (clear auth context), Change Password (form with current and new password, calls POST /auth/change-password), Delete Account (form with password confirmation, calls DELETE /auth/me), Theme toggle (light/dark using CSS variables, store preference in localStorage).
-- Month in Review (analysis): placeholder UI for now.
+## Step 9: Settings and Month in Review placeholder (Completed)
+- Implemented settings page with working logout, change password (with current password validation and token_version increment), delete account (with password confirmation), and theme toggle (light/dark using CSS variables, stored in localStorage).
+- Month in Review (analysis) page remains as a placeholder UI for now, as per instructions.
+- Verified that logout, change password, delete account, and theme toggle work correctly.
 
 ## Step 10: Final review
 - Go through security and privacy requirements checklist.
