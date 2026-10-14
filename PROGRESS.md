@@ -73,12 +73,13 @@
 - Added resize observer to handle window resizing.
 - Verified that the layout works and the app builds successfully.
 
-## Step 7: Log page
-- Toggle for Expense/Income at top.
-- Category dropdown that fetches categories from backend GET /categories (filtered by type).
-- Label input, amount input, date input (default today).
-- Form submission to POST /transactions.
-- Show success/error messages, reset form on success.
+## Step 7: Log page (Completed)
+- Implemented log page with toggle for Expense/Income.
+- Category dropdown fetches categories from backend GET /categories and updates when type changes.
+- Label input (max 100 chars), amount input (number, step 0.01), date input (date type, default today).
+- Form submission uses POST /transactions endpoint via api lib.
+- Shows success/error messages and resets form on success.
+- Verified that the form works and submits data correctly.
 
 ## Step 8: History page
 - Fetch transactions via GET /transactions (optionally without filters to get all, then group by month and category in frontend).
