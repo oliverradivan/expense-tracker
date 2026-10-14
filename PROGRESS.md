@@ -81,13 +81,14 @@
 - Shows success/error messages and resets form on success.
 - Verified that the form works and submits data correctly.
 
-## Step 8: History page
-- Fetch transactions via GET /transactions (optionally without filters to get all, then group by month and category in frontend).
-- Display grouped by month (newest first), within each month by category.
-- Show income and expense totals per month.
-- Each entry: label, amount, date, visual distinction (color/icon) for income vs expense.
-- Delete button per entry with confirmation dialog, calling DELETE /transactions/{id}.
-- Empty state when no transactions.
+## Step 8: History page (Completed)
+- Implemented history page with fetch of all transactions via GET /transactions.
+- Grouped transactions by month (newest first) and then by category.
+- Showed income and expense totals per month.
+- Distinguished income (green, +) and expense (red, -) entries with color and sign.
+- Added delete button per entry with confirmation dialog, calling DELETE /transactions/{id}.
+- Showed empty state when no transactions.
+- Verified that the page loads, displays transactions correctly, and allows deletion.
 
 ## Step 9: Settings and Month in Review placeholder
 - Settings: Logout (clear auth context), Change Password (form with current and new password, calls POST /auth/change-password), Delete Account (form with password confirmation, calls DELETE /auth/me), Theme toggle (light/dark using CSS variables, store preference in localStorage).
