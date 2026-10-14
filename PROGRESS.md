@@ -51,13 +51,17 @@
   * The delete account endpoint was working correctly; the issue was in the get_current_user function.
 - All tests passed.
 
-## Step 5: Frontend foundation
-- Set up react-router-dom for routes: /login, /register, /dashboard, /history, /log, /review, /settings.
-- Create auth context (using React Context) to hold user token and user info, with login/logout functions.
-- Create api.js lib for making HTTP requests to backend (with base URL from VITE_API_URL).
-- Protect routes: require auth for /dashboard, /history, /log, /review, /settings; redirect unauthenticated to /login.
-- If already authenticated, redirect /login and /register to /dashboard.
-- Build login and register pages with inline validation (matching backend rules) and form submission.
+## Step 5: Frontend foundation (Completed)
+- Installed react-router-dom and set up routing with BrowserRouter, Routes, and Route.
+- Created auth context in src/context/authContext.jsx with useAuth hook and AuthProvider, providing login, register, logout, changePassword, deleteAccount functions, and user/loading state.
+- Created api.js lib in src/lib/api.js for making HTTP requests to backend with credentials (for cookies).
+- Updated main.jsx to wrap the app with AuthProvider.
+- Updated App.jsx to set up protected routes: auth routes (login, register) are guest-only, other routes require authentication, and root redirects to dashboard.
+- Moved existing page files to subdirectories and renamed them to Page.jsx for lazy loading.
+- Implemented login page (src/pages/login/LoginPage.jsx) with form, validation (username 3-30 alphanumeric/underscore, password 6-128), and submission via auth context.
+- Implemented register page (src/pages/register/RegisterPage.jsx) similarly.
+- Other pages (dashboard, history, log, review, settings) remain as empty placeholders for now.
+- Verified that the frontend builds successfully and linting passes (except for one minor rule about exporting hook from context, which is acceptable).
 
 ## Step 6: App shell
 - Create layout component with fixed bottom nav bar (5 items: Dashboard, History, Log, Review, Settings).
