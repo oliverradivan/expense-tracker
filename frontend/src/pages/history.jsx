@@ -4,7 +4,7 @@ import { api } from '../lib/api'
 import { getCachedTransactions, setCachedTransactions } from '../lib/transactionCache'
 import { money, readableDate } from '../lib/utils'
 import { useAuth } from '../context/authContext'
-import './History.css'
+import './history.css'
 
 export default function History() {
   const { space, user } = useAuth()

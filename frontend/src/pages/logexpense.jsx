@@ -5,7 +5,7 @@ import { useAuth } from '../context/authContext'
 import { api, post } from '../lib/api'
 import { getCachedTransactions, setCachedTransactions } from '../lib/transactionCache'
 import { EXPENSE_CATEGORIES, INCOME_CATEGORIES } from '../utils/constants'
-import './LogExpense.css'
+import './logexpense.css'
 
 const CATEGORY_ACTION = '__add_category__'
 

@@ -3,7 +3,7 @@ import { ArrowUpRight, Check, LogOut, Moon, Sun, Users, UserPlus, Trash2 } from 
 import { api, post } from '../lib/api'
 import { useAuth } from '../context/authContext'
 import { useTheme } from '../context/themecontext'
-import './Settings.css'
+import './settings.css'
 
 function Feedback({ error, ok }) {
   return <>{error && <p className="notice error-notice">{error}</p>}{ok && <p className="notice success-notice"><Check size={15}/>{ok}</p>}</>
