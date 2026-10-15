@@ -22,7 +22,7 @@
   --reg-btn-text: #ffffff;
 }
 
-.dark .register-container {
+[data-theme="dark"] .register-container {
   --reg-text: #f5f5f7;
   --reg-muted: rgba(245, 245, 247, 0.66);
 
@@ -240,9 +240,9 @@
   transition: background-color 9999s ease-out 0s;
 }
 
-.dark .register-form input:-webkit-autofill,
-.dark .register-form input:-webkit-autofill:hover,
-.dark .register-form input:-webkit-autofill:focus {
+[data-theme="dark"] .register-form input:-webkit-autofill,
+[data-theme="dark"] .register-form input:-webkit-autofill:hover,
+[data-theme="dark"] .register-form input:-webkit-autofill:focus {
   -webkit-box-shadow: 0 0 0 100px rgba(40, 42, 48, 0.9) inset;
 }
 
@@ -310,7 +310,7 @@
   outline-offset: 0;
 }
 
-.dark .register-password-toggle:hover {
+[data-theme="dark"] .register-password-toggle:hover {
   background: rgba(255, 255, 255, 0.1);
 }
 
@@ -372,7 +372,7 @@
   cursor: not-allowed;
 }
 
-.dark .register-primary-btn {
+[data-theme="dark"] .register-primary-btn {
   border-color: rgba(255, 255, 255, 0.45);
 
   box-shadow:

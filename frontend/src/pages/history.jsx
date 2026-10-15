@@ -89,7 +89,7 @@ const HistoryPage = () => {
   const handleDeleteConfirm = async () => {
     if (!deleteId) return;
     try {
-      const res = await api.deleteForm(`/transactions/${deleteId}`, {});
+      const res = await api.delete(`/transactions/${deleteId}`);
       if (res.ok) {
         // Remove the transaction from the list
         setTransactions(transactions.filter((tx) => tx.id !== deleteId));

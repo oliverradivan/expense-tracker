@@ -43,7 +43,7 @@ html[data-lg-refract="true"] {
   --lg-refract-bar: url(#lg-refract-bar);
 }
 
-.dark {
+[data-theme="dark"] {
   --lg-bright: 1;
 
   --lg-fill-hi: rgb(255 255 255 / 11%);
@@ -76,7 +76,7 @@ html[data-lg-refract="true"] {
     --lg-field: rgb(255 255 255 / 96%);
   }
 
-  .dark {
+  [data-theme="dark"] {
     --lg-fill-hi: rgb(40 44 50 / 96%);
     --lg-fill: rgb(30 34 40 / 94%);
     --lg-fill-lo: rgb(26 30 36 / 90%);

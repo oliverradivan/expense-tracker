@@ -1,23 +1,11 @@
 /* eslint-disable react-refresh/only-export-components */
-import { createContext, useContext, useMemo, useState, useEffect, useRef } from 'react'
+import { createContext, useContext, useMemo, useState, useEffect } from 'react'
 
 const AuthContext = createContext(null)
 const API_URL = import.meta.env.VITE_API_URL || '/api'
 // localStorage keeps sessions available across reloads but is readable by page
 // JavaScript; an XSS vulnerability could expose the stored access/refresh tokens.
 const AUTH_STORAGE_KEY = 'workout-tracker-auth'
-// Refresh a bit before actual expiry so an in-flight request never lands
-// on a token that expires mid-request.
-const REFRESH_BUFFER_MS = 60 * 1000
-
-// Supabase sessions carry `expires_at` (unix seconds) once issued; fall
-// back to `expires_in` (seconds from now) just in case a caller only has that.
-function getSessionExpiryMs(session) {
-  if (!session) return 0
-  if (session.expires_at) return session.expires_at * 1000
-  if (session.expires_in) return Date.now() + session.expires_in * 1000
-  return 0
-}
 
 export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(false)
@@ -25,40 +13,29 @@ export function AuthProvider({ children }) {
   const [user, setUser] = useState(() => {
     try {
       const saved = localStorage.getItem(AUTH_STORAGE_KEY)
-      return saved ? JSON.parse(saved).user || null : null
+      // Handle migration from old format that had { user, session }
+      if (saved) {
+        const parsed = JSON.parse(saved)
+        if (parsed.user !== undefined) {
+          return parsed.user
+        }
+        // Fallback: if it's the old format with user and session, take the user
+        return parsed.user || null
+      }
+      return null
     } catch {
       return null
     }
   })
-  const [session, setSession] = useState(() => {
-    try {
-      const saved = localStorage.getItem(AUTH_STORAGE_KEY)
-      return saved ? JSON.parse(saved).session || null : null
-    } catch {
-      return null
-    }
-  })
-
-  // Mirrors state into a ref so async helpers (authFetch, refreshSession)
-  // always read the latest session without needing to be re-created on
-  // every login/refresh.
-  const sessionRef = useRef(session)
-  useEffect(() => {
-    sessionRef.current = session
-  }, [session])
-
-  // Coalesces concurrent refresh attempts (e.g. two components fetching
-  // at once right as the token expires) into a single network call.
-  const refreshInFlightRef = useRef(null)
 
   useEffect(() => {
-    if (user || session) {
-      localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify({ user, session }))
+    if (user) {
+      localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify({ user }))
       return
     }
 
     localStorage.removeItem(AUTH_STORAGE_KEY)
-  }, [user, session])
+  }, [user])
 
   const handleAuth = async (form, mode) => {
     setLoading(true)
@@ -72,10 +49,18 @@ export function AuthProvider({ children }) {
         password: form.password,
       }
 
+      // Convert payload to form data, skipping undefined values
+      const formData = new URLSearchParams()
+      for (const [key, value] of Object.entries(payload)) {
+        if (value !== undefined && value !== null) {
+          formData.append(key, value)
+        }
+      }
+
       const response = await fetch(`${API_URL}/auth/${endpoint}`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: formData,
       })
 
       const rawText = await response.text()
@@ -93,15 +78,18 @@ export function AuthProvider({ children }) {
         throw new Error(result.detail || result.message || 'Authentication failed.')
       }
 
-      if (endpoint === 'register') {
-        setMessage(`Account created for @${result.username}. You can now log in.`)
-        return { success: true }
+      // After successful login or registration, fetch the user info from /auth/me
+      const meResponse = await fetch(`${API_URL}/auth/me`, {
+        credentials: 'include',
+      })
+      if (!meResponse.ok) {
+        throw new Error('Failed to fetch user info')
       }
-
-      sessionRef.current = result.session
-      setUser(result.user)
-      setSession(result.session)
-      setMessage('Logged in successfully.')
+      const meData = await meResponse.json()
+      setUser(meData)
+      setMessage(endpoint === 'register'
+        ? `Account created for @${meData.username}. You can now log in.`
+        : 'Logged in successfully.')
       return { success: true }
     } catch (error) {
       setMessage(error.message || 'Something went wrong. Please try again.')
@@ -111,127 +99,36 @@ export function AuthProvider({ children }) {
     }
   }
 
-  const handleLogout = () => {
-    sessionRef.current = null
-    setUser(null)
-    setSession(null)
-    localStorage.removeItem(AUTH_STORAGE_KEY)
+  const handleLogout = async () => {
+    setLoading(true)
     setMessage('')
-  }
-
-  // Exchanges the refresh_token for a new session via the backend.
-  // Concurrent callers share one in-flight request instead of firing
-  // several refreshes at once.
-  const refreshSession = () => {
-    const currentSession = sessionRef.current
-
-    if (!currentSession?.refresh_token) {
-      handleLogout()
-      return Promise.resolve(null)
-    }
-
-    if (refreshInFlightRef.current) {
-      return refreshInFlightRef.current
-    }
-
-    const doRefresh = async () => {
-      try {
-        const response = await fetch(`${API_URL}/auth/refresh`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ refresh_token: currentSession.refresh_token }),
-        })
-
-        if (!response.ok) {
-          throw new Error('Session refresh failed.')
-        }
-
-        const result = await response.json()
-        setUser(result.user)
-        setSession(result.session)
-        sessionRef.current = result.session
-        return result.session
-      } catch (error) {
-        console.error(error)
-        handleLogout()
-        return null
-      } finally {
-        refreshInFlightRef.current = null
+    try {
+      const response = await fetch(`${API_URL}/auth/logout`, {
+        method: 'POST',
+        credentials: 'include',
+      })
+      if (!response.ok) {
+        throw new Error('Logout failed')
       }
+    } catch (error) {
+      setMessage(error.message || 'Logout failed')
+    } finally {
+      setLoading(false)
+      setUser(null)
+      localStorage.removeItem(AUTH_STORAGE_KEY)
     }
-
-    refreshInFlightRef.current = doRefresh()
-    return refreshInFlightRef.current
-  }
-
-  // Returns a definitely-valid access token, refreshing first if the
-  // current one is at or past REFRESH_BUFFER_MS from expiring.
-  const getAccessToken = async () => {
-    const currentSession = sessionRef.current
-    if (!currentSession) return null
-
-    const expiresAtMs = getSessionExpiryMs(currentSession)
-    const isExpiringSoon = expiresAtMs > 0 && expiresAtMs - Date.now() <= REFRESH_BUFFER_MS
-
-    if (!isExpiringSoon) {
-      return currentSession.access_token
-    }
-
-    const refreshed = await refreshSession()
-    return refreshed?.access_token ?? null
-  }
-
-  // Authenticated fetch: attaches a valid token, and if the backend still
-  // returns 401 (e.g. token revoked, clock drift), refreshes once and
-  // retries before giving up.
-  const authFetch = async (path, options = {}) => {
-    const token = await getAccessToken()
-    if (!token) {
-      throw new Error('Not authenticated.')
-    }
-
-    const response = await fetch(`${API_URL}${path}`, {
-      ...options,
-      headers: {
-        ...(options.headers || {}),
-        Authorization: `Bearer ${token}`,
-      },
-    })
-
-    if (response.status !== 401) {
-      return response
-    }
-
-    const refreshed = await refreshSession()
-    if (!refreshed) {
-      throw new Error('Session expired. Please log in again.')
-    }
-
-    return fetch(`${API_URL}${path}`, {
-      ...options,
-      headers: {
-        ...(options.headers || {}),
-        Authorization: `Bearer ${refreshed.access_token}`,
-      },
-    })
   }
 
   const value = useMemo(
     () => ({
       user,
-      session,
       loading,
       message,
       setMessage,
-      setUser,
-      setSession,
       handleAuth,
       handleLogout,
-      authFetch,
-      getAccessToken,
-      refreshSession,
     }),
-    [user, session, loading, message],
+    [user, loading, message],
   )
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>

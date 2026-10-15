@@ -41,7 +41,7 @@ const LogPage = () => {
     setSuccess(false);
     setLoading(true);
     try {
-      const res = await api.postForm('/transactions/', {
+      const res = await api.post('/transactions/', {
         type,
         category,
         label,

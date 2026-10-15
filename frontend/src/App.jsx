@@ -64,11 +64,7 @@ function App() {
           element={<Navigate to="/dashboard" replace />}
         />
 
-        {/* Fallback for 404 */}
-        <Route
-          path="*"
-          element={<div>404 - Page not found</div>}
-        />
+
       </Routes>
     </Suspense>
   )

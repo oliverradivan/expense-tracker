@@ -60,7 +60,7 @@
   }
 }
 
-.dark .bottom-nav {
+[data-theme="dark"] .bottom-nav {
   --bn-ink: #b4b8bd;
   --bn-ink-hover: #f5f5f5;
   --bn-ink-active: #ffffff;
@@ -253,7 +253,7 @@
     box-shadow 0.2s ease;
 }
 
-.dark .bottom-nav-center-btn {
+[data-theme="dark"] .bottom-nav-center-btn {
   background:
     radial-gradient(
       circle at 32% 22%,

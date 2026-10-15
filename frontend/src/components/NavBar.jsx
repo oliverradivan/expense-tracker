@@ -16,7 +16,7 @@ function NavBar() {
     visible: false,
   })
 
-  const isLogWorkout = location.pathname.startsWith('/logworkout')
+  const isLogExpense = location.pathname.startsWith('/logexpense')
 
   useEffect(() => {
     const measure = () => {
@@ -109,10 +109,10 @@ function NavBar() {
         </NavLink>
 
         <div
-          className={`bottom-nav-center${isLogWorkout ? ' active' : ''}`}
+          className={`bottom-nav-center${isLogExpense ? ' active' : ''}`}
         >
           <NavLink
-            to="/logworkout"
+            to="/logexpense"
             className="bottom-nav-center-btn"
             aria-label="Log workout"
           >
