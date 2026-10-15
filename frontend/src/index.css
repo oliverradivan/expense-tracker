@@ -18,9 +18,9 @@
   --danger-soft: #ffeaed;
   --income: #16834a;
   --income-soft: #e8f6ed;
-  --glass-fill: rgb(255 255 255 / 72%);
-  --glass-border: rgb(255 255 255 / 78%);
-  --glass-shadow: 0 16px 44px rgb(0 0 0 / 8%), inset 0 1px 0 rgb(255 255 255 / 82%);
+  --glass-fill: var(--lg-fill);
+  --glass-border: var(--lg-edge);
+  --glass-shadow: var(--lg-drop);
   --shadow: 0 14px 40px rgb(0 0 0 / 6%);
 }
 
@@ -38,9 +38,9 @@ html[data-theme="dark"] {
   --danger-soft: #351b1e;
   --income: #55cf86;
   --income-soft: #172b20;
-  --glass-fill: rgb(30 30 30 / 73%);
-  --glass-border: rgb(255 255 255 / 13%);
-  --glass-shadow: 0 18px 50px rgb(0 0 0 / 34%), inset 0 1px 0 rgb(255 255 255 / 12%);
+  --glass-fill: var(--lg-fill);
+  --glass-border: var(--lg-edge);
+  --glass-shadow: var(--lg-drop);
   --shadow: 0 14px 40px rgb(0 0 0 / 24%);
 }
 

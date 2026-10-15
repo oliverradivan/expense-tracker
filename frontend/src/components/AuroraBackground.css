@@ -1,0 +1,41 @@
+.aurora-background {
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
+  background: var(--bg);
+  isolation: isolate;
+}
+
+.aurora-background::before,
+.aurora-background::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  width: min(72vw, 720px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  filter: blur(70px);
+  opacity: .28;
+  pointer-events: none;
+}
+
+.aurora-background::before {
+  top: -48%;
+  left: -22%;
+  background: radial-gradient(circle, color-mix(in srgb, var(--ink) 19%, transparent), transparent 68%);
+}
+
+.aurora-background::after {
+  right: -24%;
+  bottom: -54%;
+  background: radial-gradient(circle, color-mix(in srgb, var(--ink) 15%, transparent), transparent 68%);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .aurora-background::before { animation: aurora-drift 16s ease-in-out infinite alternate; }
+  .aurora-background::after { animation: aurora-drift 20s ease-in-out infinite alternate-reverse; }
+}
+
+@keyframes aurora-drift {
+  to { transform: translate3d(5vw, 4vh, 0) scale(1.08); }
+}

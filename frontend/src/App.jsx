@@ -10,6 +10,8 @@ import History from './pages/history'
 import LogExpense from './pages/logexpense'
 import MIR from './pages/MIR'
 import Settings from './pages/settings'
+import NotFoundPage from './pages/404'
+import LGDefs from './components/LGDefs'
 import './App.css'
 
 function Gate({ children }) {
@@ -21,7 +23,7 @@ export default function App() {
   const [introComplete, setIntroComplete] = useState(false)
   useEffect(() => { const timer = setTimeout(() => setIntroComplete(true), 620); return () => clearTimeout(timer) }, [])
   if (loading || !introComplete) return <div className="startup"><div className="startup-mark"><span className="brand-mark"><WalletIcon size={26}/></span><i/></div><p>Making room for a clearer picture</p><span className="startup-loader"/></div>
-  return <Routes>
+  return <><LGDefs /><Routes>
     <Route path="/login" element={user ? <Navigate to="/" replace /> : <Login />} />
     <Route path="/register" element={user ? <Navigate to="/" replace /> : <Register />} />
     <Route element={<Gate><Layout /></Gate>}>
@@ -31,6 +33,6 @@ export default function App() {
       <Route path="/review" element={<MIR />} />
       <Route path="/settings" element={<Settings />} />
     </Route>
-    <Route path="*" element={<Navigate to={user ? '/' : '/login'} replace />} />
-  </Routes>
+    <Route path="*" element={<NotFoundPage />} />
+  </Routes></>
 }

@@ -2,7 +2,6 @@ import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { useRef } from 'react'
 import { ChevronDown } from 'lucide-react'
 import { useAuth } from '../context/authContext'
-import LGDefs from './LGDefs'
 import NavBar from './NavBar'
 import WalletIcon from './WalletIcon'
 import './Layout.css'
@@ -30,7 +29,6 @@ export default function Layout() {
   }
 
   return <div className="app-shell">
-    <LGDefs />
     <header className="topbar glass-panel"><a href="/" className="wordmark"><span className="brand-mark"><WalletIcon /></span><span>ledger<span className="wordmark-dot">.</span></span></a><div className="topbar-right"><label className="space-select-wrap"><span className="sr-only">Financial space</span><select value={space.id} onChange={(e) => selectSpace(e.target.value)}><option value="private">My Private Account</option>{households.map((h) => <option key={h.id} value={h.id}>{h.name}</option>)}</select><ChevronDown size={15} /></label><span className="user-avatar" title={user?.username}>{user?.username?.slice(0, 1).toUpperCase()}</span></div></header>
     <main key={location.pathname} className="main-content page-slide-in" onTouchStart={(event) => { const touch = event.touches[0]; touchStart.current = { x: touch.clientX, y: touch.clientY } }} onTouchEnd={handleTouchEnd}><Outlet /></main><NavBar />
   </div>
