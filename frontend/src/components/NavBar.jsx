@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { NavLink, useLocation } from 'react-router-dom'
 import './NavBar.css'
-import LiquidGlassDefs from './LiquidGlassDefs'
+import LiquidGlassDefs from './LGDefs'
 
 const navLinkClass = ({ isActive }) =>
   `bottom-nav-link${isActive ? ' active' : ''}`
