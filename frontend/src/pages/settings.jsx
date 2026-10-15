@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Check, KeyRound, LogOut, Moon, Sun, Trash2 } from 'lucide-react'
+import { Check, KeyRound, LogOut, Monitor, Moon, Sun, Trash2 } from 'lucide-react'
 import { api, post } from '../lib/api'
 import { useAuth } from '../context/authContext'
 import { useTheme } from '../context/themecontext'
@@ -11,7 +11,7 @@ function Feedback({ error, ok }) {
 
 export default function Settings() {
   const { user, signOut } = useAuth()
-  const { theme, setTheme } = useTheme()
+  const { mode, setTheme } = useTheme()
   const [passwords, setPasswords] = useState({ current_password: '', new_password: '' })
   const [error, setError] = useState('')
   const [ok, setOk] = useState('')
@@ -42,7 +42,7 @@ export default function Settings() {
     <Feedback error={error} ok={ok}/>
     <section className="settings-section">
       <div className="settings-section-title"><span className="section-icon"><Sun size={17}/></span><div><h2>Appearance</h2><p>Make Ledger feel like yours.</p></div></div>
-      <div className="theme-options"><button className={theme === 'light' ? 'chosen' : ''} onClick={() => setTheme('light')}><Sun size={17}/>Light</button><button className={theme === 'dark' ? 'chosen' : ''} onClick={() => setTheme('dark')}><Moon size={17}/>Dark</button></div>
+      <div className="theme-options"><button className={mode === 'system' ? 'chosen' : ''} onClick={() => setTheme('system')}><Monitor size={17}/>System</button><button className={mode === 'light' ? 'chosen' : ''} onClick={() => setTheme('light')}><Sun size={17}/>Light</button><button className={mode === 'dark' ? 'chosen' : ''} onClick={() => setTheme('dark')}><Moon size={17}/>Dark</button></div>
     </section>
     <section className="settings-section">
       <div className="settings-section-title"><span className="section-icon"><KeyRound size={17}/></span><div><h2>Change password</h2><p>Keep your account secure.</p></div></div>

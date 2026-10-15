@@ -3,11 +3,23 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link id="apple-icon" rel="apple-touch-icon" sizes="180x180" href="/app-icon-light-180.png" />
+    <meta name="theme-color" content="#f4f4f4" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#111111" media="(prefers-color-scheme: dark)" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>expense-tracker</title>
+    <title>Ledger | Expense Tracker</title>
   </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
+    <script>
+      const icon = document.getElementById('apple-icon')
+      const appearance = window.matchMedia('(prefers-color-scheme: dark)')
+      const updateHomeIcon = () => { icon.href = appearance.matches ? '/app-icon-dark-180.png' : '/app-icon-light-180.png' }
+      updateHomeIcon()
+      appearance.addEventListener?.('change', updateHomeIcon)
+    </script>
   </body>
 </html>

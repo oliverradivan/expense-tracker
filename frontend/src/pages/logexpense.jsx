@@ -82,7 +82,7 @@ export default function LogExpense() {
   return <section className="page form-page">
     <div className="page-kicker"><span className="kicker-dot"/> A NEW ENTRY</div>
     <div className="page-heading-row"><div><h1>Log a transaction<span className="heading-period">.</span></h1><p className="page-intro">This will be added to <strong>{space.name}</strong>.</p></div></div>
-    <form className="entry-card" onSubmit={submit}>
+    <form className="entry-card glass-panel" onSubmit={submit}>
       <div className="field-label-row"><span className="field-label">TRANSACTION TYPE</span><span className="required-hint">REQUIRED</span></div>
       <div className="type-switch" role="group" aria-label="Transaction type"><button type="button" className={type === 'expense' ? 'selected' : ''} onClick={() => changeType('expense')}>Expense</button><button type="button" className={type === 'income' ? 'selected income-selected' : ''} onClick={() => changeType('income')}>Income</button></div>
 

@@ -54,7 +54,7 @@ export default function History() {
       <div className="group-heading"><h2>{new Date(`${month}-01T12:00:00`).toLocaleDateString('en', { month: 'long', year: 'numeric' })}</h2><span>{Object.values(categories).flat().length} transactions</span></div>
       {Object.entries(categories).sort(([a], [b]) => a.localeCompare(b)).map(([category, rows]) => <div className="category-group" key={category}>
         <div className="category-group-heading"><span>{category}</span><span>{rows.length}</span></div>
-          <div className="transaction-list">{rows.map((item) => <article className="transaction-row" key={item.id}>
+          <div className="transaction-list glass-panel">{rows.map((item) => <article className="transaction-row" key={item.id}>
           <span className={`transaction-kind ${item.type}`} aria-hidden="true">{item.type === 'income' ? <ArrowDownLeft size={18}/> : <ArrowUpRight size={18}/>}</span>
           <div className="transaction-description"><strong>{item.label}</strong><span>{readableDate(item.date)} · {{ one_time: 'One time', monthly: 'Monthly', yearly: 'Yearly' }[item.frequency || 'one_time']}</span></div>
           <strong className={`transaction-amount ${item.type}`}>{item.type === 'income' ? '+' : '−'}{money(item.amount)}</strong>

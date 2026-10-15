@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <style>
+    .background { fill: #fff; }
+    .wallet { fill: #111; }
+    .detail { fill: #fff; }
+    @media (prefers-color-scheme: dark) {
+      .background { fill: #161616; }
+      .wallet { fill: #fff; }
+      .detail { fill: #161616; }
+    }
+  </style>
+  <rect class="background" width="512" height="512" />
+  <path class="wallet" d="M100 155a39 39 0 0 1 39-39h246a27 27 0 0 1 27 27v31h-91a77 77 0 0 0 0 154h91v35a39 39 0 0 1-39 39H139a39 39 0 0 1-39-39V155Z" />
+  <path class="wallet" d="M109 153a30 30 0 0 1 30-30h211v34H139a16 16 0 0 0-16 16v205a39 39 0 0 1-14-30V153Z" />
+  <path class="wallet" d="M321 194h123v112H321a56 56 0 0 1 0-112Z" />
+  <circle class="detail" cx="337" cy="250" r="12" />
+</svg>
