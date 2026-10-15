@@ -1,0 +1,61 @@
+.register-page {
+  min-height: calc(100vh - 56px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-primary);
+  padding: 1rem;
+}
+
+.register-card {
+  width: 100%;
+  max-width: 400px;
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  padding: 2rem;
+}
+
+.register-card h2 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  color: var(--text-primary);
+  font-size: 1.5rem;
+}
+
+.register-card .form-group {
+  margin-bottom: 1rem;
+}
+
+.register-card .form-label {
+  font-weight: 500;
+  margin-bottom: 0.25rem;
+}
+
+.register-card .form-control,
+.register-card .form-select {
+  padding: 0.5rem 0.75rem;
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.register-card button {
+  width: 100%;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  margin-top: 1.5rem;
+}
+
+.register-card p {
+  text-align: center;
+  margin-top: 1rem;
+  font-size: 0.875rem;
+}
+
+.register-card a {
+  color: var(--accent);
+  text-decoration: none;
+}
+.register-card a:hover {
+  text-decoration: underline;
+}

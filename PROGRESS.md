@@ -101,6 +101,7 @@
 - Ran npm run lint and npm run build in frontend; build succeeds, linting shows only minor warnings and unused variable errors (non-functional).
 - Updated README with setup and run instructions.
 - Listed unfinished or risky items: Month in Review placeholder, swipe deck implementation, limited production testing, theme persistence via localStorage.
+- Fixed lint warnings and added missing CSS imports to all pages.
 
 ## Step 1: Backend foundation (Completed)
 - Created config.py to load environment variables from backend/.env (using python-dotenv).
