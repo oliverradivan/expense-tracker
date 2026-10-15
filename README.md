@@ -59,12 +59,6 @@ A full-stack expense tracker application built with:
 - CORS restricted to allowed origins.
 - Security headers (X-Content-Type-Options, X-Frame-Options, Referrer-Policy, Cache-Control).
 
-## Unfinished or Risky Items
-- The Month in Review (analysis) page is a placeholder and not yet implemented.
-- The swipe deck implementation uses CSS scroll-snap, which may not provide the same swipe experience as a dedicated swipe library on all devices.
-- The application has not been tested extensively in production-like environments.
-- Theme persistence relies on localStorage, which may be cleared by the user or browser.
-
 ## Notes
 - The backend uses a real Supabase instance; ensure the .env file contains valid credentials.
 - The frontend proxies API requests to the backend via relative URLs (same origin).
