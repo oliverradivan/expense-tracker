@@ -1,6 +1,11 @@
 from functools import lru_cache
 from supabase import create_client
-from backend.config import SUPABASE_URL, SUPABASE_SECRET_KEY
+try:
+    from backend.config import SUPABASE_URL, SUPABASE_SECRET_KEY
+except ModuleNotFoundError as exc:
+    if exc.name != "backend":
+        raise
+    from config import SUPABASE_URL, SUPABASE_SECRET_KEY
 
 @lru_cache(maxsize=1)
 def get_supabase():

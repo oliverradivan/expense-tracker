@@ -2,7 +2,12 @@ import bcrypt
 import jwt
 import hashlib
 from datetime import datetime, timedelta, timezone
-from backend.config import JWT_SECRET
+try:
+    from backend.config import JWT_SECRET
+except ModuleNotFoundError as exc:
+    if exc.name != "backend":
+        raise
+    from config import JWT_SECRET
 
 def hash_password(password: str) -> str:
     digest = hashlib.sha256(password.encode("utf-8")).hexdigest().encode("ascii")

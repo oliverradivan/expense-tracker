@@ -1,7 +1,12 @@
 from datetime import date
 from decimal import Decimal, InvalidOperation
 from fastapi import HTTPException
-from backend.data.supabase import get_supabase
+try:
+    from backend.data.supabase import get_supabase
+except ModuleNotFoundError as exc:
+    if exc.name != "backend":
+        raise
+    from data.supabase import get_supabase
 
 EXPENSE_CATEGORIES = ("Subscription", "Apartment", "Grocery", "Other")
 INCOME_CATEGORIES = ("Job", "Maanak", "Gift", "Other")

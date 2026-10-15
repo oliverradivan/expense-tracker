@@ -1,7 +1,14 @@
 from fastapi import APIRouter, Depends, HTTPException
-from backend.data.supabase import get_supabase
-from backend.services.auth import current_user
-from backend.services.transactions import list_transactions, create_transaction, EXPENSE_CATEGORIES, INCOME_CATEGORIES
+try:
+    from backend.data.supabase import get_supabase
+    from backend.services.auth import current_user
+    from backend.services.transactions import list_transactions, create_transaction, EXPENSE_CATEGORIES, INCOME_CATEGORIES
+except ModuleNotFoundError as exc:
+    if exc.name != "backend":
+        raise
+    from data.supabase import get_supabase
+    from services.auth import current_user
+    from services.transactions import list_transactions, create_transaction, EXPENSE_CATEGORIES, INCOME_CATEGORIES
 
 router = APIRouter()
 

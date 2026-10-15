@@ -1,7 +1,13 @@
 from datetime import datetime, timezone
 from fastapi import APIRouter, Depends, HTTPException
-from backend.data.supabase import get_supabase
-from backend.services.auth import current_user, USERNAME
+try:
+    from backend.data.supabase import get_supabase
+    from backend.services.auth import current_user, USERNAME
+except ModuleNotFoundError as exc:
+    if exc.name != "backend":
+        raise
+    from data.supabase import get_supabase
+    from services.auth import current_user, USERNAME
 
 router = APIRouter()
 db = get_supabase

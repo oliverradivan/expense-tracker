@@ -1,8 +1,14 @@
 import re
 from fastapi import HTTPException, Request
 from jwt import InvalidTokenError
-from backend.data.supabase import get_supabase
-from backend.services.security import decode_token, hash_password, verify_password
+try:
+    from backend.data.supabase import get_supabase
+    from backend.services.security import decode_token, hash_password, verify_password
+except ModuleNotFoundError as exc:
+    if exc.name != "backend":
+        raise
+    from data.supabase import get_supabase
+    from services.security import decode_token, hash_password, verify_password
 
 USERNAME = re.compile(r"^[A-Za-z0-9_]{3,30}$")
 

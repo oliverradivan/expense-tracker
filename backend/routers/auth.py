@@ -1,10 +1,18 @@
 from fastapi import APIRouter, Depends, Form, Request, Response, HTTPException
 from slowapi import Limiter
 from slowapi.util import get_remote_address
-from backend.config import COOKIE_SECURE
-from backend.data.supabase import get_supabase
-from backend.services.auth import current_user, register, authenticate
-from backend.services.security import create_token, hash_password, verify_password
+try:
+    from backend.config import COOKIE_SECURE
+    from backend.data.supabase import get_supabase
+    from backend.services.auth import current_user, register, authenticate
+    from backend.services.security import create_token, hash_password, verify_password
+except ModuleNotFoundError as exc:
+    if exc.name != "backend":
+        raise
+    from config import COOKIE_SECURE
+    from data.supabase import get_supabase
+    from services.auth import current_user, register, authenticate
+    from services.security import create_token, hash_password, verify_password
 
 router = APIRouter()
 limiter = Limiter(key_func=get_remote_address)
