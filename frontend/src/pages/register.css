@@ -505,3 +505,20 @@
     border-radius: 28px;
   }
 }
+
+.login-card .brand-badge svg {
+  position: relative;
+
+  width: 90%;
+  height: 90%;
+
+  display: block;
+
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.1;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+
+  flex-shrink: 0;
+}

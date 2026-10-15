@@ -196,28 +196,23 @@
 
 .login-card .brand-badge svg {
   position: relative;
-
   width: 90%;
   height: 90%;
-
   display: block;
-
   fill: none;
   stroke: currentColor;
-  stroke-width: 2.2;
+  stroke-width: 1.1;
   stroke-linecap: round;
+  stroke-linejoin: round;
 
   flex-shrink: 0;
 }
 
 .login-card .auth-header h1 {
   margin: 0;
-
   color: var(--auth-text);
-
   font-size: 2.5rem;
   font-weight: 800;
-
   line-height: 1.15;
   letter-spacing: -0.04em;
 }
