@@ -126,7 +126,5 @@ export default function Dashboard() {
         <form className="inline-form" onSubmit={(event) => invite(event, household.id)}><input placeholder="Invite by username" value={inviteNames[household.id] || ''} onChange={(event) => setInviteNames((current) => ({ ...current, [household.id]: event.target.value }))} required/><button className="secondary-button" disabled={busy}><UserPlus size={15}/> Invite</button></form>
       </article>)}
     </section>
-
-    <div className="dashboard-foot"><span className="section-marker">01</span><span>GOOD FINANCES START WITH A CLEAR PICTURE</span><Link aria-label="Log expense" className="quick-add" to="/log"><Plus size={18}/></Link></div>
   </section>
 }

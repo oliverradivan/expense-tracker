@@ -15,7 +15,7 @@ function NotFoundPage() {
           <h1>Page not found</h1>
           <p>The page you are looking for does not exist.</p>
           <Link to="/" className="primary-btn">
-            Back to Ledger
+            Back to fathom
           </Link>
         </div>
       </div>

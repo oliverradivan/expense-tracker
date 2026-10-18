@@ -1,6 +1,6 @@
 {
-  "name": "Ledger Expense Tracker",
-  "short_name": "Ledger",
+  "name": "fathom | Expense Tracker",
+  "short_name": "fathom",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#f4f4f4",
