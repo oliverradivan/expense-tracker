@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Check, KeyRound, LogOut, Monitor, Moon, Pencil, Plus, Sun, Trash2, X } from 'lucide-react'
+import { Check, Eye, EyeOff, KeyRound, LogOut, Monitor, Moon, Pencil, Plus, Sun, Trash2, X } from 'lucide-react'
 import { api, post } from '../lib/api'
 import { useAuth } from '../context/authContext'
 import { useTheme } from '../context/themecontext'
@@ -16,6 +16,8 @@ export default function Settings() {
   const [error, setError] = useState('')
   const [ok, setOk] = useState('')
   const [busy, setBusy] = useState(false)
+  const [showCurrentPassword, setShowCurrentPassword] = useState(false)
+  const [showNewPassword, setShowNewPassword] = useState(false)
   const [tab, setTab] = useState('preferences')
   const [categories, setCategories] = useState([])
   const [categoryType, setCategoryType] = useState('expense')
@@ -102,7 +104,7 @@ export default function Settings() {
       </section>
       <section className="settings-section">
         <div className="settings-section-title"><span className="section-icon"><KeyRound size={17}/></span><div><h2>Change password</h2><p>Keep your account secure.</p></div></div>
-        <form className="settings-password" onSubmit={changePassword}><input type="password" placeholder="Current password" autoComplete="current-password" value={passwords.current_password} onChange={e => setPasswords({ ...passwords, current_password: e.target.value })} required/><input type="password" placeholder="New password (7+ characters)" minLength={7} autoComplete="new-password" value={passwords.new_password} onChange={e => setPasswords({ ...passwords, new_password: e.target.value })} required/><button className="secondary-button" disabled={busy}>Update password</button></form>
+        <form className="settings-password" onSubmit={changePassword}><span className="password-input-control"><input type={showCurrentPassword ? 'text' : 'password'} placeholder="Current password" autoComplete="current-password" value={passwords.current_password} onChange={e => setPasswords({ ...passwords, current_password: e.target.value })} required/><button type="button" className="password-visibility-button" aria-label={showCurrentPassword ? 'Hide current password' : 'Show current password'} aria-pressed={showCurrentPassword} onClick={() => setShowCurrentPassword(value => !value)}>{showCurrentPassword ? <EyeOff size={17}/> : <Eye size={17}/>}</button></span><span className="password-input-control"><input type={showNewPassword ? 'text' : 'password'} placeholder="New password (7+ characters)" minLength={7} autoComplete="new-password" value={passwords.new_password} onChange={e => setPasswords({ ...passwords, new_password: e.target.value })} required/><button type="button" className="password-visibility-button" aria-label={showNewPassword ? 'Hide new password' : 'Show new password'} aria-pressed={showNewPassword} onClick={() => setShowNewPassword(value => !value)}>{showNewPassword ? <EyeOff size={17}/> : <Eye size={17}/>}</button></span><button className="secondary-button" disabled={busy}>Update password</button></form>
       </section>
     </>}
     {tab === 'categories' && <section className="settings-section category-settings-section">

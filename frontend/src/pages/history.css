@@ -2,3 +2,11 @@
 .category-group{margin:11px 0}.category-group-heading{display:flex;justify-content:space-between;padding:0 4px 7px;color:var(--muted);font-size:10px;font-weight:600}.category-group-heading span:last-child{font-variant-numeric:tabular-nums}
 .transaction-delete{flex:none;width:29px;height:29px;display:grid;place-items:center;border:0;border-radius:9px;background:transparent;color:var(--muted);opacity:.55;transition:opacity .15s,background .15s,color .15s}.transaction-delete:hover{opacity:1;background:color-mix(in srgb,var(--danger) 10%,var(--surface));color:var(--danger)}.transaction-delete:disabled{opacity:.3;cursor:wait}@media(max-width:420px){.transaction-delete{opacity:.75;width:25px;height:29px}.transaction-delete svg{width:14px}}
 .transaction-kind.expense{background:var(--danger-soft);color:var(--danger)}.transaction-kind.income{background:var(--income-soft);color:var(--income)}.transaction-amount.income{color:var(--income)}.transaction-amount.expense{color:var(--danger)}.transaction-list{background:var(--glass-fill);border-color:var(--glass-border);backdrop-filter:blur(20px) saturate(160%);-webkit-backdrop-filter:blur(20px) saturate(160%);box-shadow:var(--glass-shadow)}
+
+/* ---- spark accent: yellow to red ---- */
+:root{--spark-a:#e0b21f;--spark-b:#e04f4f;--spark:linear-gradient(135deg,var(--spark-a),var(--spark-b))}
+.group-heading{align-items:baseline}
+.group-heading h2::after{content:'';display:block;width:28px;height:3px;margin-top:6px;border-radius:3px;background:var(--spark)}
+.transaction-row{position:relative}
+.transaction-row::before{content:'';position:absolute;left:0;top:16px;bottom:16px;width:3px;border-radius:0 3px 3px 0;background:var(--spark);opacity:0;transition:opacity .15s}
+.transaction-row:hover::before{opacity:1}

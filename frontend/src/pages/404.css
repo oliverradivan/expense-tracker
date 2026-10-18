@@ -14,7 +14,13 @@
   z-index: 0;
   transform: translate(-50%, -52%);
   color: transparent;
-  background: linear-gradient(145deg, color-mix(in srgb, var(--ink) 13%, transparent), color-mix(in srgb, var(--ink) 3%, transparent));
+  --nf-ghost-a: #e0b21f;
+  --nf-ghost-b: #e04f4f;
+  background: linear-gradient(
+    145deg,
+    color-mix(in srgb, var(--nf-ghost-a) 45%, transparent),
+    color-mix(in srgb, var(--nf-ghost-b) 45%, transparent)
+  );
   -webkit-background-clip: text;
   background-clip: text;
   font-size: clamp(10rem, 56vw, 20rem);
