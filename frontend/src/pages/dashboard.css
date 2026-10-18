@@ -34,6 +34,7 @@
 /* ---- spark accent: yellow to red ---- */
 :root{--spark-a:#e0b21f;--spark-b:#e04f4f;--spark:linear-gradient(135deg,var(--spark-a),var(--spark-b))}
 .dashboard-page .kicker-dot{background:var(--spark)}
+.dashboard-page .username{display:inline-block;color:transparent;background:var(--spark);-webkit-background-clip:text;background-clip:text}
 .dashboard-heading h1 em{color:transparent;background:var(--spark);-webkit-background-clip:text;background-clip:text;padding-right:.06em}
 .dashboard-stamp svg{color:var(--spark-a)}
 .welcome-symbol>span{color:transparent;background:var(--spark);-webkit-background-clip:text;background-clip:text}

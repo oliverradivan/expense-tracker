@@ -94,7 +94,7 @@ export default function Settings() {
   const visibleCategories = categories.filter(item => item.type === categoryType)
   return <section className="page settings-page">
     <div className="page-kicker"><span className="kicker-dot"/> PREFERENCES & PEOPLE</div>
-    <div className="page-heading-row"><div><h1>Settings<span className="heading-period">.</span></h1><p className="page-intro">Signed in as <strong>{user?.username}</strong>.</p></div></div>
+    <div className="page-heading-row"><div><h1>Settings</h1><p className="page-intro">Signed in as <strong>{user?.username}</strong>.</p></div></div>
     <div className="settings-tabs" role="tablist" aria-label="Settings sections"><button type="button" role="tab" aria-selected={tab === 'preferences'} className={tab === 'preferences' ? 'active' : ''} onClick={() => setTab('preferences')}>Preferences</button><button type="button" role="tab" aria-selected={tab === 'categories'} className={tab === 'categories' ? 'active' : ''} onClick={() => setTab('categories')}>Categories</button></div>
     <Feedback error={error} ok={ok}/>
     {tab === 'preferences' && <>

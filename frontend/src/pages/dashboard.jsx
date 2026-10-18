@@ -89,7 +89,7 @@ export default function Dashboard() {
   return <section className="page dashboard-page">
     <div className="page-kicker"><span className="kicker-dot" /> {today.toUpperCase()}</div>
     <div className="dashboard-heading">
-      <div><h1>Welcome back, <em>{user?.username || 'friend'}.</em></h1><p className="page-intro">A clear view of your money starts here.</p></div>
+      <div><h1>Welcome back, <em className="username">{user?.username || 'friend'}</em></h1><p className="page-intro">A clear view of your money starts here.</p></div>
       <div className="dashboard-stamp"><Sparkles size={17} /><span>YOUR MONEY, IN VIEW</span></div>
     </div>
 

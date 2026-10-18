@@ -72,7 +72,8 @@ export default function MIR() {
 
   return <section className="page mir-page">
     <div className="page-kicker"><span className="kicker-dot"/> YOUR MONTH, IN BALANCE</div>
-    <div className="page-heading-row"><div><h1>Month in review<span className="heading-period">.</span></h1><p className="page-intro">A monthly snapshot of {space.name.toLowerCase()}.</p></div><label className="month-picker"><span className="sr-only">Choose month</span><input type="month" value={month} onChange={event => setMonth(event.target.value)}/></label></div>
+    <div className="page-heading-row"><div><h1>Month in review</h1>
+    <p className="page-intro">A monthly snapshot of {space.name.toLowerCase()}.</p></div><label className="month-picker"><span className="sr-only">Choose month</span><input type="month" value={month} onChange={event => setMonth(event.target.value)}/></label></div>
     {loadedKey === requestKey && error && <p className="notice error-notice">{error}</p>}
     {isLoading ? <div className="quiet-state">Putting the numbers together…</div> : <>
       <div className="review-summary glass-panel"><span className="eyebrow">PROFIT / LOSS · {monthLabel(month).toUpperCase()}</span><strong className={income - expenses < 0 ? 'negative' : ''}>{money((income - expenses) / 100)}</strong><span>Income less expenses · {changeLabel(income - expenses, priorIncome - priorExpenses)}</span></div>
