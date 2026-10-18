@@ -9,3 +9,4 @@
 .form-footnote svg{color:var(--spark-a)}
 .amount-control:has(input:focus)>span{color:var(--spark-b)}
 .new-category-box{border-left:3px solid var(--spark-a)}
+.entry-card.expense-entry-card{background:color-mix(in srgb,var(--glass-fill) 88%,var(--danger-soft));border-color:color-mix(in srgb,var(--glass-border) 68%,var(--danger) 32%)}.entry-card.income-entry-card{background:color-mix(in srgb,var(--glass-fill) 88%,var(--income-soft));border-color:color-mix(in srgb,var(--glass-border) 68%,var(--income) 32%)}

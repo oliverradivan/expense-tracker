@@ -34,7 +34,7 @@ export default function Register() {
 
   return (
     <AuthFrame
-      title="Make it yours."
+      title="Make it yours"
       subtitle="Create a private log of your everyday finances."
       footer={
         <>

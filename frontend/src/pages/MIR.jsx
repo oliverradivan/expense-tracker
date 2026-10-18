@@ -71,7 +71,6 @@ export default function MIR() {
   const max = Math.max(income, expenses, 1)
 
   return <section className="page mir-page">
-    <div className="page-kicker"><span className="kicker-dot"/> YOUR MONTH, IN BALANCE</div>
     <div className="page-heading-row"><div><h1>Month in review</h1>
     <p className="page-intro">A monthly snapshot of {space.name.toLowerCase()}.</p></div><label className="month-picker"><span className="sr-only">Choose month</span><input type="month" value={month} onChange={event => setMonth(event.target.value)}/></label></div>
     {loadedKey === requestKey && error && <p className="notice error-notice">{error}</p>}

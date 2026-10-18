@@ -24,3 +24,6 @@
 .settings-page .kicker-dot{background:var(--spark)}
 .section-icon{background:linear-gradient(135deg,color-mix(in srgb,var(--spark-a) 24%,transparent),color-mix(in srgb,var(--spark-b) 24%,transparent));color:var(--spark-b)}
 .settings-tabs button.active{box-shadow:inset 0 -2px 0 var(--spark-a)}
+.account-actions-label{color:var(--muted);font-size:11px}
+.account-actions .delete-button{color:var(--danger)}
+.expense-categories{--category-color:var(--danger);--category-soft:var(--danger-soft)}.income-categories{--category-color:var(--income);--category-soft:var(--income-soft)}.category-settings-section .settings-category-row{background:color-mix(in srgb,var(--glass-fill) 86%,var(--category-soft));border-color:color-mix(in srgb,var(--glass-border) 70%,var(--category-color) 30%)}.category-settings-section .settings-category-tabs button.chosen{color:var(--category-color);background:var(--category-soft);border-color:color-mix(in srgb,var(--category-color) 38%,var(--line))}.category-settings-section .category-create-form input:focus{border-color:var(--category-color)}

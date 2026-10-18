@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Check, Eye, EyeOff, KeyRound, LogOut, Monitor, Moon, Pencil, Plus, Sun, Trash2, X } from 'lucide-react'
+import { Check, Eye, EyeOff, KeyRound, Monitor, Moon, Pencil, Plus, Sun, Trash2, X } from 'lucide-react'
 import { api, post } from '../lib/api'
 import { useAuth } from '../context/authContext'
 import { useTheme } from '../context/themecontext'
@@ -10,7 +10,7 @@ function Feedback({ error, ok }) {
 }
 
 export default function Settings() {
-  const { user, signOut, space } = useAuth()
+  const { user, space } = useAuth()
   const { mode, setTheme } = useTheme()
   const [passwords, setPasswords] = useState({ current_password: '', new_password: '' })
   const [error, setError] = useState('')
@@ -93,21 +93,16 @@ export default function Settings() {
 
   const visibleCategories = categories.filter(item => item.type === categoryType)
   return <section className="page settings-page">
-    <div className="page-kicker"><span className="kicker-dot"/> PREFERENCES & PEOPLE</div>
     <div className="page-heading-row"><div><h1>Settings</h1><p className="page-intro">Signed in as <strong>{user?.username}</strong>.</p></div></div>
-    <div className="settings-tabs" role="tablist" aria-label="Settings sections"><button type="button" role="tab" aria-selected={tab === 'preferences'} className={tab === 'preferences' ? 'active' : ''} onClick={() => setTab('preferences')}>Preferences</button><button type="button" role="tab" aria-selected={tab === 'categories'} className={tab === 'categories' ? 'active' : ''} onClick={() => setTab('categories')}>Categories</button></div>
+    <div className="settings-tabs" role="tablist" aria-label="Settings sections"><button type="button" role="tab" aria-selected={tab === 'preferences'} className={tab === 'preferences' ? 'active' : ''} onClick={() => setTab('preferences')}>Preferences</button><button type="button" role="tab" aria-selected={tab === 'categories'} className={tab === 'categories' ? 'active' : ''} onClick={() => setTab('categories')}>Categories</button><button type="button" role="tab" aria-selected={tab === 'account'} className={tab === 'account' ? 'active' : ''} onClick={() => setTab('account')}>Account</button></div>
     <Feedback error={error} ok={ok}/>
     {tab === 'preferences' && <>
       <section className="settings-section">
         <div className="settings-section-title"><span className="section-icon"><Sun size={17}/></span><div><h2>Appearance</h2><p>Make fathom feel like yours.</p></div></div>
         <div className="theme-options"><button className={mode === 'system' ? 'chosen' : ''} onClick={() => setTheme('system')}><Monitor size={17}/>System</button><button className={mode === 'light' ? 'chosen' : ''} onClick={() => setTheme('light')}><Sun size={17}/>Light</button><button className={mode === 'dark' ? 'chosen' : ''} onClick={() => setTheme('dark')}><Moon size={17}/>Dark</button></div>
       </section>
-      <section className="settings-section">
-        <div className="settings-section-title"><span className="section-icon"><KeyRound size={17}/></span><div><h2>Change password</h2><p>Keep your account secure.</p></div></div>
-        <form className="settings-password" onSubmit={changePassword}><span className="password-input-control"><input type={showCurrentPassword ? 'text' : 'password'} placeholder="Current password" autoComplete="current-password" value={passwords.current_password} onChange={e => setPasswords({ ...passwords, current_password: e.target.value })} required/><button type="button" className="password-visibility-button" aria-label={showCurrentPassword ? 'Hide current password' : 'Show current password'} aria-pressed={showCurrentPassword} onClick={() => setShowCurrentPassword(value => !value)}>{showCurrentPassword ? <EyeOff size={17}/> : <Eye size={17}/>}</button></span><span className="password-input-control"><input type={showNewPassword ? 'text' : 'password'} placeholder="New password (7+ characters)" minLength={7} autoComplete="new-password" value={passwords.new_password} onChange={e => setPasswords({ ...passwords, new_password: e.target.value })} required/><button type="button" className="password-visibility-button" aria-label={showNewPassword ? 'Hide new password' : 'Show new password'} aria-pressed={showNewPassword} onClick={() => setShowNewPassword(value => !value)}>{showNewPassword ? <EyeOff size={17}/> : <Eye size={17}/>}</button></span><button className="secondary-button" disabled={busy}>Update password</button></form>
-      </section>
     </>}
-    {tab === 'categories' && <section className="settings-section category-settings-section">
+    {tab === 'categories' && <section className={`settings-section category-settings-section ${categoryType}-categories`}>
       <div className="settings-section-title"><span className="section-icon"><Pencil size={17}/></span><div><h2>Categories</h2><p>Manage custom categories for {space.name}. Built-in categories stay available.</p></div></div>
       <div className="settings-category-content">
         <div className="settings-category-tabs" role="group" aria-label="Transaction category type"><button type="button" className={categoryType === 'expense' ? 'chosen' : ''} onClick={() => { setCategoryType('expense'); setEditingCategory(null) }}>Expenses</button><button type="button" className={categoryType === 'income' ? 'chosen' : ''} onClick={() => { setCategoryType('income'); setEditingCategory(null) }}>Income</button></div>
@@ -116,6 +111,12 @@ export default function Settings() {
         <div className="settings-category-list">{visibleCategories.length ? visibleCategories.map(item => <div className="settings-category-row" key={item.id}><strong>{item.name}</strong><div><button type="button" className="small-button" onClick={() => { setEditingCategory({ ...item }); setNewCategory(''); setCategoryError(''); setCategoryOk('') }} aria-label={`Rename ${item.name}`}><Pencil size={14}/> Edit</button><button type="button" className="category-remove-button" disabled={categoryBusy} onClick={() => removeCategory(item)} aria-label={`Remove ${item.name}`}><Trash2 size={14}/> Remove</button></div></div>) : <p className="field-help">No custom {categoryType} categories yet.</p>}</div>
       </div>
     </section>}
-    <section className="account-actions"><button className="logout-button" onClick={signOut}><LogOut size={16}/> Log out</button><button className="delete-button" onClick={deleteAccount} disabled={busy}><Trash2 size={16}/> Delete account</button></section>
+    {tab === 'account' && <>
+      <section className="settings-section">
+        <div className="settings-section-title"><span className="section-icon"><KeyRound size={17}/></span><div><h2>Change password</h2><p>Keep your account secure.</p></div></div>
+        <form className="settings-password" onSubmit={changePassword}><span className="password-input-control"><input type={showCurrentPassword ? 'text' : 'password'} placeholder="Current password" autoComplete="current-password" value={passwords.current_password} onChange={e => setPasswords({ ...passwords, current_password: e.target.value })} required/><button type="button" className="password-visibility-button" aria-label={showCurrentPassword ? 'Hide current password' : 'Show current password'} aria-pressed={showCurrentPassword} onClick={() => setShowCurrentPassword(value => !value)}>{showCurrentPassword ? <EyeOff size={17}/> : <Eye size={17}/>}</button></span><span className="password-input-control"><input type={showNewPassword ? 'text' : 'password'} placeholder="New password (7+ characters)" minLength={7} autoComplete="new-password" value={passwords.new_password} onChange={e => setPasswords({ ...passwords, new_password: e.target.value })} required/><button type="button" className="password-visibility-button" aria-label={showNewPassword ? 'Hide new password' : 'Show new password'} aria-pressed={showNewPassword} onClick={() => setShowNewPassword(value => !value)}>{showNewPassword ? <EyeOff size={17}/> : <Eye size={17}/>}</button></span><button className="secondary-button" disabled={busy}>Update password</button></form>
+      </section>
+      <section className="account-actions"><span className="account-actions-label">Delete your account and its private data</span><button className="delete-button" onClick={deleteAccount} disabled={busy}><Trash2 size={16}/> Delete account</button></section>
+    </>}
   </section>
 }

@@ -1,12 +1,12 @@
 import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { useRef } from 'react'
-import { ChevronDown } from 'lucide-react'
+import { ChevronDown, LogOut } from 'lucide-react'
 import { useAuth } from '../context/authContext'
 import NavBar from './NavBar'
 import WalletIcon from './WalletIcon'
 import './Layout.css'
 export default function Layout() {
-  const { user, households, space, selectSpace } = useAuth()
+  const { user, households, space, selectSpace, signOut } = useAuth()
   const navigate = useNavigate()
   const location = useLocation()
   const touchStart = useRef(null)
@@ -46,6 +46,7 @@ export default function Layout() {
               <ChevronDown size={15} />
               </label>
               <span linkto="/settings" className="user-avatar" title={user?.username}>{user?.username?.slice(0, 1).toUpperCase()}</span>
+              {location.pathname === '/settings' && <button type="button" className="topbar-logout" onClick={signOut}><LogOut size={15}/><span>Log out</span></button>}
               </div>
               </header>
     <main key={location.pathname}
