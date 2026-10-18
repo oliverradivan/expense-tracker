@@ -45,7 +45,6 @@ export default function History() {
   }, {})
 
   return <section className="page">
-    <div className="page-kicker"><span className="kicker-dot"/> TRANSACTION LEDGER</div>
     <div className="page-heading-row"><div><h1>History</h1><p className="page-intro">A clear record of {space.name.toLowerCase()}.</p></div><span className="count-pill">{viewState === 'ready' ? `${displayItems.length} ${displayItems.length === 1 ? 'entry' : 'entries'}` : 'Loading'}</span></div>
     {viewState === 'loading' && <div className="quiet-state">Gathering your transactions…</div>}
     {displayLoaded && error && <div className="notice error-notice">{error}</div>}

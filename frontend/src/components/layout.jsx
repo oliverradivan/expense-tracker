@@ -1,4 +1,4 @@
-import { Outlet, useLocation, useNavigate } from 'react-router-dom'
+import { Outlet, useLocation, useNavigate, Link} from 'react-router-dom'
 import { useRef } from 'react'
 import { ChevronDown, LogOut } from 'lucide-react'
 import { useAuth } from '../context/authContext'
@@ -45,7 +45,7 @@ export default function Layout() {
               </select>
               <ChevronDown size={15} />
               </label>
-              <span linkto="/settings" className="user-avatar" title={user?.username}>{user?.username?.slice(0, 1).toUpperCase()}</span>
+              <Link to="/settings"><span className="user-avatar" title={user?.username}>{user?.username?.slice(0, 1).toUpperCase()}</span></Link>
               {location.pathname === '/settings' && <button type="button" className="topbar-logout" onClick={signOut}><LogOut size={15}/><span>Log out</span></button>}
               </div>
               </header>
