@@ -1,3 +1,9 @@
+:root {
+  --spark-a: #e0b21f;
+  --spark-b: #e04f4f;
+  --spark: linear-gradient(135deg, var(--spark-a), var(--spark-b));
+}
+
 .auth-screen {
   min-height: 100vh;
   min-height: 100dvh;
@@ -16,6 +22,15 @@
   font-weight: 700;
   letter-spacing: -.05em;
   margin-bottom: 28px;
+  color: transparent;
+  background: var(--spark);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+.auth-brand .brand-mark {
+  color: inherit;
+  background: none;
 }
 
 .auth-panel {
