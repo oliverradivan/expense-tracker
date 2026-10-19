@@ -1,7 +1,7 @@
 import { useContext, useEffect, useMemo, useRef, useState } from 'react'
 import './AuroraBackground.css'
 import { startAuroraField } from './auroraField'
-import { AuroraContext, AuroraPageActive } from '../context/AuroraContext'
+import { AuroraContext, AuroraPageActive } from './context/AuroraContext.js'
 
 /* ------------------------------------------------------------------ */
 /* The actual background layer (canvas + CSS fallback)                 */
