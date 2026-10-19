@@ -2,6 +2,7 @@ import { Navigate, Route, Routes } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { useAuth } from './context/authContext'
 import Layout from './components/layout'
+import CoinIcon from './components/CoinIcon'
 import Login from './pages/login'
 import Register from './pages/register'
 import Dashboard from './pages/dashboard'
@@ -21,7 +22,7 @@ export default function App() {
   const { user, loading } = useAuth()
   const [introComplete, setIntroComplete] = useState(false)
   useEffect(() => { const timer = setTimeout(() => setIntroComplete(true), 620); return () => clearTimeout(timer) }, [])
-  if (loading || !introComplete) return <div className="startup"><div className="startup-mark"><img className="startup-coin" src="/favicon.svg" alt="" width="53" height="53"/><i style={{ borderRadius: '50%' }}/></div><p>Making room for a clearer picture</p><span className="startup-loader"/></div>
+  if (loading || !introComplete) return <div className="startup"><div className="startup-mark"><CoinIcon size={53} /><i style={{ borderRadius: '50%' }}/></div><p>Making room for a clearer picture</p><span className="startup-loader"/></div>
   return <><LGDefs /><Routes>
     <Route path="/login" element={user ? <Navigate to="/" replace /> : <Login />} />
     <Route path="/register" element={user ? <Navigate to="/" replace /> : <Register />} />

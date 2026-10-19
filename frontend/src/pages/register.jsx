@@ -45,9 +45,8 @@ export default function Register() {
       <form className="auth-form" onSubmit={submit}>
         <label className="field">
           <input
-            placeholder="Username"
-            aria-label="Username"
             autoComplete="username"
+            placeholder="Username"
             value={username}
             onChange={e => setUsername(e.target.value)}
             minLength={3}
@@ -61,9 +60,8 @@ export default function Register() {
         <label className="field">
           <span className="password-input-control">
             <input
-              placeholder="Password"
-              aria-label="Password"
               type={showPassword ? 'text' : 'password'}
+              placeholder="Password"
               autoComplete="new-password"
               value={password}
               onChange={e => setPassword(e.target.value)}

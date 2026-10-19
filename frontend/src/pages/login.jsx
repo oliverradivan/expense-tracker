@@ -2,19 +2,16 @@ import { useState } from 'react'
 import { Eye, EyeOff } from 'lucide-react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/authContext'
-import WalletIcon from '../components/WalletIcon'
+import CoinIcon from '../components/CoinIcon'
 import './login.css'
 
 function AuthShell({ title, subtitle, children, footer }) {
   return (
     <main className="auth-screen">
       <div className="auth-brand">
-        <WalletIcon size={33} />fathom
+        <CoinIcon size={33} />fathom
       </div>
       <div className="auth-panel glass-panel">
-        <span className="page-kicker">
-          <span className="kicker-dot" /> YOUR FINANCES, MADE CLEAR
-        </span>
         <h1>{title}</h1>
         <p className="page-intro">{subtitle}</p>
         {children}
@@ -65,9 +62,8 @@ export default function Login() {
       <form className="auth-form" onSubmit={submit}>
         <label className="field">
           <input
-            placeholder="Username"
-            aria-label="Username"
             autoComplete="username"
+            placeholder="Username"
             value={username}
             onChange={e => setUsername(e.target.value)}
             required
@@ -78,9 +74,8 @@ export default function Login() {
         <label className="field">
           <span className="password-input-control">
             <input
-              placeholder="Password"
-              aria-label="Password"
               type={showPassword ? 'text' : 'password'}
+              placeholder="Password"
               autoComplete="current-password"
               value={password}
               onChange={e => setPassword(e.target.value)}

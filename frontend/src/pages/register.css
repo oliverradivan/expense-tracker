@@ -1,1 +1,5 @@
-.auth-panel .field-help{margin:-3px 0 0}
+.auth-panel .field-help {
+  margin: -3px 0 0;
+  color: var(--muted);
+  font-size: 12px;
+}

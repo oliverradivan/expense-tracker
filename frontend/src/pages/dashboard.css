@@ -3,6 +3,7 @@
   --spark-a: #e0b21f;
   --spark-b: #e04f4f;
   --spark: linear-gradient(135deg, var(--spark-a), var(--spark-b));
+  --username-orange: #f28c28;
 }
 
 /* ---- heading ---- */
@@ -27,10 +28,7 @@
 .dashboard-heading h1 em {
   font-family: 'Playfair Display', Georgia, serif;
   font-weight: 500;
-  color: transparent;
-  background: var(--spark);
-  -webkit-background-clip: text;
-  background-clip: text;
+  color: var(--username-orange);
   padding-right: .06em;
 }
 

@@ -3,7 +3,7 @@ import { useRef } from 'react'
 import { ChevronDown, LogOut } from 'lucide-react'
 import { useAuth } from '../context/authContext'
 import NavBar from './NavBar'
-import WalletIcon from './WalletIcon'
+import CoinIcon from './CoinIcon'
 import './Layout.css'
 export default function Layout() {
   const { user, households, space, selectSpace, signOut } = useAuth()
@@ -32,7 +32,7 @@ export default function Layout() {
     <header className="topbar glass-panel">
       <a href="/" className="wordmark">
       <span className="brand-mark">
-        <WalletIcon />
+        <CoinIcon />
         </span>
         <span className="brand-name">fathom</span>
         </a>

@@ -125,7 +125,7 @@ export default function Dashboard() {
 
       <div className="dashboard-heading">
         <div>
-          <h1>Welcome back, <em>{user?.username || 'friend'}.</em></h1>
+          <h1>Welcome back, <em>{user.username}</em></h1>
           <p className="page-intro">A clear view of your money starts here.</p>
         </div>
         <div className="dashboard-stamp"><Sparkles size={17} /><span>YOUR MONEY, IN VIEW</span></div>
