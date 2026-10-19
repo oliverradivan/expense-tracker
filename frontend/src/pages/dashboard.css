@@ -25,11 +25,32 @@
   letter-spacing: -.055em;
 }
 
-.dashboard-heading h1 em {
+.dashboard-page .dashboard-heading h1 em {
   font-family: 'Playfair Display', Georgia, serif;
   font-weight: 500;
   color: var(--username-orange);
   padding-right: .06em;
+  /* soft orange glow that slowly breathes */
+  text-shadow:
+    0 0 6px rgb(242 140 40 / 55%),
+    0 0 18px rgb(242 140 40 / 42%),
+    0 0 40px rgb(242 140 40 / 28%);
+  animation: username-glow 3.6s ease-in-out infinite;
+}
+
+@keyframes username-glow {
+  0%, 100% {
+    text-shadow:
+      0 0 6px rgb(242 140 40 / 55%),
+      0 0 18px rgb(242 140 40 / 42%),
+      0 0 40px rgb(242 140 40 / 28%);
+  }
+  50% {
+    text-shadow:
+      0 0 8px rgb(242 140 40 / 80%),
+      0 0 24px rgb(242 140 40 / 60%),
+      0 0 56px rgb(242 140 40 / 40%);
+  }
 }
 
 .dashboard-stamp {
@@ -508,5 +529,9 @@
   .coin {
     animation: none;
     transition: none;
+  }
+
+  .dashboard-heading h1 em {
+    animation: none;
   }
 }

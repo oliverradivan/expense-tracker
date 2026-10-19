@@ -5,7 +5,9 @@ import pngToIco from 'png-to-ico'
 const lightBg = '#f4f4f4'
 const darkBg = '#0b0c0d'
 const svg = await readFile(new URL('../public/favicon.svg', import.meta.url), 'utf8')
-const darkSvg = svg.replace('</style>', '.face { fill: #222527 !important; }</style>')
+const darkSvg = svg
+  .replace('fill="#fff"', 'fill="#151718"')
+  .replace('fill="#ededed"', 'fill="#222527"')
 
 function render(markup, width, height = width) {
   return new Resvg(markup, { fitTo: { mode: 'width', value: width } }).render().asPng()
