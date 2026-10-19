@@ -1,64 +1,44 @@
-/* Shared liquid-glass controls. Refraction scale values live alongside the
-   SVG filters in LGDefs.jsx; these variables tune the CSS part of the effect. */
+/* Shared glass controls. Glass is the inexpensive default; use glass-lens
+   only on small elements where visible distortion is worth the extra work. */
 :root {
-  --lg-blur-panel: 4px;
-  --lg-blur-control: 3px;
-  --lg-blur-bar: 4px;
+  --lg-blur: 6px;
   --lg-tint-opacity: 0.07;
   --lg-refraction-strength: 24;
-  --lg-aberration-strength: 2;
-  --lg-control-refraction-strength: 10;
   --lg-corner-radius: 24px;
   --lg-sat: 180%;
   --lg-bright: 1.06;
-  --lg-refract-panel: brightness(1);
-  --lg-refract-control: brightness(1);
-  --lg-refract-bar: brightness(1);
-  --lg-fill-hi: rgb(255 255 255 / 10%);
   --lg-fill: rgb(255 255 255 / var(--lg-tint-opacity));
-  --lg-fill-lo: rgb(255 255 255 / 4%);
-  --lg-field: rgb(255 255 255 / 10%);
   --lg-base: transparent;
   --lg-edge: rgb(255 255 255 / 42%);
   --lg-rim: inset 1px 1px 1px rgb(255 255 255 / 62%), inset -1px -1px 1px rgb(255 255 255 / 25%), inset 0 0 20px rgb(255 255 255 / 15%);
-  --lg-rim-soft: inset 1px 1px 1px rgb(255 255 255 / 55%), inset -1px -1px 1px rgb(255 255 255 / 20%), inset 0 0 14px rgb(255 255 255 / 12%);
   --lg-drop: 0 8px 26px rgb(20 30 40 / 12%);
-  --lg-drop-hover: 0 12px 32px rgb(20 30 40 / 17%);
   --lg-sheen: linear-gradient(115deg, rgb(255 255 255 / 25%) 0%, rgb(255 255 255 / 10%) 24%, transparent 54%);
-}
-
-html[data-lg-refract="true"] {
-  --lg-refract-panel: url(#lg-refract-panel);
-  --lg-refract-control: url(#lg-refract-control);
-  --lg-refract-bar: url(#lg-refract-bar);
 }
 
 html[data-theme="dark"] {
   --lg-bright: 1.08;
-  --lg-fill-hi: rgb(255 255 255 / 10%);
-  --lg-fill: rgb(255 255 255 / var(--lg-tint-opacity));
-  --lg-fill-lo: rgb(255 255 255 / 4%);
-  --lg-field: rgb(5 6 7 / 25%);
   --lg-base: rgb(21 23 24 / 8%);
   --lg-edge: rgb(255 255 255 / 25%);
   --lg-rim: inset 1px 1px 1px rgb(255 255 255 / 48%), inset -1px -1px 1px rgb(255 255 255 / 14%), inset 0 0 20px rgb(255 255 255 / 10%);
-  --lg-rim-soft: inset 1px 1px 1px rgb(255 255 255 / 38%), inset -1px -1px 1px rgb(255 255 255 / 12%), inset 0 0 14px rgb(255 255 255 / 8%);
   --lg-drop: 0 8px 28px rgb(0 0 0 / 32%);
-  --lg-drop-hover: 0 12px 34px rgb(0 0 0 / 40%);
   --lg-sheen: linear-gradient(115deg, rgb(255 255 255 / 18%) 0%, rgb(255 255 255 / 6%) 24%, transparent 54%);
 }
 
 .lg-defs { position: absolute; width: 0; height: 0; overflow: hidden; pointer-events: none; }
 
+/* Legacy glass-* names stay supported and use the cheap treatment. */
+.glass,
 .glass-panel,
 .glass-chip,
 .glass-control,
 .glass-bar {
   border-color: var(--glass-border, var(--lg-edge));
-  box-shadow: var(--lg-rim), var(--glass-shadow, var(--lg-drop));
-  background: var(--lg-sheen), var(--glass-fill, var(--lg-fill)), var(--lg-base);
-  -webkit-backdrop-filter: blur(var(--lg-blur-panel)) saturate(var(--lg-sat)) brightness(var(--lg-bright));
-  backdrop-filter: blur(var(--lg-blur-panel)) saturate(var(--lg-sat)) brightness(var(--lg-bright));
+  box-shadow: var(--lg-rim), var(--glass-shadow, var(--lg-drop)) !important;
+  background: var(--lg-sheen), var(--glass-fill, var(--lg-fill)), var(--lg-base) !important;
+  -webkit-backdrop-filter: blur(var(--lg-blur)) saturate(var(--lg-sat)) brightness(var(--lg-bright)) !important;
+  backdrop-filter: blur(var(--lg-blur)) saturate(var(--lg-sat)) brightness(var(--lg-bright)) !important;
+  will-change: transform;
+  transform: translateZ(0);
 }
 
 .glass-panel {
@@ -67,7 +47,13 @@ html[data-theme="dark"] {
   border: 1px solid var(--glass-border, var(--lg-edge));
 }
 
-.glass-panel::before {
+.glass { position: relative; isolation: isolate; }
+
+.glass-chip,
+.glass-control { border: 1px solid var(--lg-edge); }
+
+.glass-panel::before,
+.glass::before {
   content: "";
   position: absolute;
   z-index: -1;
@@ -77,54 +63,26 @@ html[data-theme="dark"] {
   background: linear-gradient(115deg, rgb(255 255 255 / 25%) 0%, rgb(255 255 255 / 10%) 24%, transparent 54%);
 }
 
-.glass-chip,
-.glass-control {
-  border: 1px solid var(--lg-edge);
-  box-shadow: var(--lg-rim-soft), var(--lg-drop);
-  -webkit-backdrop-filter: blur(var(--lg-blur-control)) saturate(var(--lg-sat)) brightness(var(--lg-bright));
-  backdrop-filter: blur(var(--lg-blur-control)) saturate(var(--lg-sat)) brightness(var(--lg-bright));
+/* One displacement pass. The subtle colored rim hints at a prism without
+   filtering and recompositing three full color channels. */
+.glass-lens {
+  --lg-rim: inset 1px 1px 1px rgb(255 255 255 / 62%), inset -1px -1px 1px rgb(255 255 255 / 25%), inset 0 0 20px rgb(255 255 255 / 15%), inset 1px 0 rgb(130 240 255 / 35%), inset -1px 0 rgb(255 130 220 / 30%);
 }
 
-.glass-bar {
-  -webkit-backdrop-filter: blur(var(--lg-blur-bar)) saturate(var(--lg-sat)) brightness(var(--lg-bright));
-  backdrop-filter: blur(var(--lg-blur-bar)) saturate(var(--lg-sat)) brightness(var(--lg-bright));
-}
-
-/* Chromium applies the SVG lens after capturing the backdrop. Other browsers
-   keep the clear blur/saturation treatment above and retain all gloss styling. */
-@supports (backdrop-filter: url(#lg-refract-panel)) {
-  html[data-lg-refract="true"] .glass-panel {
-    -webkit-backdrop-filter: var(--lg-refract-panel) blur(var(--lg-blur-panel)) saturate(var(--lg-sat)) brightness(var(--lg-bright));
-    backdrop-filter: var(--lg-refract-panel) blur(var(--lg-blur-panel)) saturate(var(--lg-sat)) brightness(var(--lg-bright));
-  }
-  html[data-lg-refract="true"] .glass-chip,
-  html[data-lg-refract="true"] .glass-control {
-    -webkit-backdrop-filter: var(--lg-refract-control) blur(var(--lg-blur-control)) saturate(var(--lg-sat)) brightness(var(--lg-bright));
-    backdrop-filter: var(--lg-refract-control) blur(var(--lg-blur-control)) saturate(var(--lg-sat)) brightness(var(--lg-bright));
-  }
-  html[data-lg-refract="true"] .glass-bar {
-    -webkit-backdrop-filter: var(--lg-refract-bar) blur(var(--lg-blur-bar)) saturate(var(--lg-sat)) brightness(var(--lg-bright));
-    backdrop-filter: var(--lg-refract-bar) blur(var(--lg-blur-bar)) saturate(var(--lg-sat)) brightness(var(--lg-bright));
+@supports (backdrop-filter: url(#lg-refract-lens)) {
+  html[data-lg-refract="true"] .glass-lens {
+    -webkit-backdrop-filter: url(#lg-refract-lens) blur(var(--lg-blur)) saturate(var(--lg-sat)) brightness(var(--lg-bright)) !important;
+    backdrop-filter: url(#lg-refract-lens) blur(var(--lg-blur)) saturate(var(--lg-sat)) brightness(var(--lg-bright)) !important;
   }
 }
 
 @supports not (backdrop-filter: blur(2px)) {
-  .glass-panel, .glass-chip, .glass-control, .glass-bar { background: var(--surface); }
+  .glass, .glass-panel, .glass-chip, .glass-control, .glass-bar { background: var(--surface) !important; }
 }
 
-@media (prefers-reduced-transparency: reduce) {
-  :root {
-    --lg-fill-hi: rgb(255 255 255 / 92%);
-    --lg-fill: rgb(255 255 255 / 86%);
-    --lg-fill-lo: rgb(255 255 255 / 78%);
-    --lg-field: rgb(255 255 255 / 96%);
+@media (max-width: 768px), (prefers-reduced-motion: reduce) {
+  html[data-lg-refract="true"] .glass-lens {
+    -webkit-backdrop-filter: blur(var(--lg-blur)) saturate(var(--lg-sat)) brightness(var(--lg-bright)) !important;
+    backdrop-filter: blur(var(--lg-blur)) saturate(var(--lg-sat)) brightness(var(--lg-bright)) !important;
   }
-  html[data-theme="dark"] {
-    --lg-fill-hi: rgb(40 44 50 / 96%);
-    --lg-fill: rgb(30 34 40 / 94%);
-    --lg-fill-lo: rgb(26 30 36 / 90%);
-    --lg-field: rgb(12 14 18 / 90%);
-  }
-  html, html[data-lg-refract="true"] { --lg-refract-panel: brightness(1); --lg-refract-control: brightness(1); --lg-refract-bar: brightness(1); }
-  .glass-panel, .glass-chip, .glass-control, .glass-bar { -webkit-backdrop-filter: none; backdrop-filter: none; }
 }

@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/authContext'
+import CoinIcon from '../components/CoinIcon'
 import './dashboard.css'
 
 const today = new Intl.DateTimeFormat(undefined, { weekday: 'long', month: 'long', day: 'numeric' }).format(new Date())
@@ -43,6 +44,9 @@ export default function Dashboard() {
 
   return (
     <section className="page dashboard-page">
+      <Link to="/settings" className="dashboard-settings-coin" aria-label="Open settings" title="Settings">
+        <span className="brand-mark"><CoinIcon size={28} /></span>
+      </Link>
       <div className="page-kicker"><span className="kicker-dot" /> {today.toUpperCase()}</div>
 
       <div className="dashboard-heading">

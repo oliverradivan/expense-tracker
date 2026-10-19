@@ -6,17 +6,51 @@
   --username-orange: #f28c28;
 }
 
-/* ---- heading ---- */
+/* Ensure the main page wrapper acts as the positioning anchor for top elements */
+.dashboard-page {
+  position: relative;
+}
+
+/* ---- coin (top-left) ---- */
+.dashboard-settings-coin {
+  position: absolute;
+  z-index: 15;
+  top: 16px;
+  left: 16px;
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border-radius: 16px;
+  transition: transform 180ms ease;
+}
+
+.dashboard-settings-coin:hover {
+  transform: translateY(-2px) rotate(-5deg);
+}
+
 .dashboard-page .kicker-dot {
   background: var(--spark);
 }
 
+/* heading is just the title and intro now */
 .dashboard-heading {
   display: flex;
-  justify-content: space-between;
-  align-items: end;
-  gap: 20px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  gap: 8px;
   margin: 18px 0 30px;
+}
+
+@media (max-width: 600px) {
+  .dashboard-settings-coin {
+    top: 12px;
+    left: 13px;
+    width: 38px;
+    height: 38px;
+  }
 }
 
 .dashboard-heading h1 {
@@ -53,17 +87,43 @@
   }
 }
 
-.dashboard-stamp {
+/* date (the .page-kicker in the JSX) sits top-right, level with the coin on the left */
+.dashboard-page .page-kicker {
+  position: absolute;
+  z-index: 15;
+  top: 16px;
+  right: 16px;
+  height: 44px;
+  margin: 0;
+  padding: 0;
   display: flex;
   align-items: center;
   gap: 8px;
   color: var(--muted);
   font-size: 11px;
-  padding-bottom: 10px;
 }
 
-.dashboard-stamp svg {
-  color: var(--spark-a);
+.dashboard-page .kicker-dot {
+  display: inline-block;
+  flex: none;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  animation: kicker-pulse 1.8s ease-in-out infinite;
+}
+
+/* dot pulses on/off (opacity) while scaling and glowing */
+@keyframes kicker-pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgb(224 178 31 / 0%);
+  }
+  50% {
+    opacity: 0.2;
+    transform: scale(1.3);
+    box-shadow: 0 0 10px 3px rgb(224 178 31 / 55%);
+  }
 }
 
 .dashboard-feedback {
@@ -512,7 +572,7 @@
   color: var(--danger);
 }
 
-/* ---- generic bits kept from the old file (may be used elsewhere) ---- */
+/* ---- generic bits kept from the old file ---- */
 .text-link {
   display: inline-flex;
   align-items: center;
@@ -610,11 +670,15 @@
   }
 
   .dashboard-heading {
-    align-items: start;
+    align-items: center;
   }
 
-  .dashboard-stamp {
-    display: none;
+  /* phones: keep the date level with the smaller coin on the right */
+  .dashboard-page .page-kicker {
+    top: 12px;
+    right: 13px;
+    height: 38px;
+    font-size: 10px;
   }
 
   .dashboard-foot {
@@ -649,6 +713,10 @@
   }
 
   .dashboard-heading h1 em {
+    animation: none;
+  }
+
+  .dashboard-page .kicker-dot {
     animation: none;
   }
 }

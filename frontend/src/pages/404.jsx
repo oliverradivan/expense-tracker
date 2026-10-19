@@ -9,7 +9,7 @@ function NotFoundPage() {
           404
         </span>
 
-        <div className="not-found-card">
+        <div className="not-found-card glass">
           <h1>Page not found</h1>
           <p>The page you are looking for does not exist.</p>
           <Link to="/Login" className="primary-btn">

@@ -7,7 +7,7 @@ import './Household.css'
 /* Reusable heading for every section: icon + title + one-line hint + optional count */
 function SectionHeading({ icon: Icon, title, hint, count, attention }) {
   return <div className="household-section-heading">
-    <span className="household-section-icon"><Icon size={16} /></span>
+    <span className="household-section-icon"><Icon size={15} /></span>
     <div className="household-section-text">
       <h3>{title}</h3>
       {hint && <p>{hint}</p>}
@@ -102,14 +102,14 @@ export default function Household() {
     <div className="page-heading-row">
       <div>
         <h1>Household</h1>
-        <p className="page-intro">{isMember ? 'Manage your shared space and its members.' : 'Share expenses with the people you trust.'}</p>
+        <p className="page-intro">{isMember ? 'Manage your shared spaces and members.' : 'Share expenses with the people you trust.'}</p>
       </div>
     </div>
 
     {(error || message) && <p className={`notice ${error ? 'error-notice' : 'success-notice'}`} role={error ? 'alert' : 'status'}>{error || <><Check size={15} />{message}</>}</p>}
 
     {!isMember ? <>
-      {/* Invitations float to the top (via CSS order) when you have any, since they need a reply */}
+      {/* Invitations float to the top when you have any */}
       <section className={`household-section glass-panel household-invitations-panel ${invitations.length ? 'is-attention' : ''}`}>
         <SectionHeading
           icon={Inbox}
@@ -137,14 +137,14 @@ export default function Household() {
           <SectionHeading icon={Users} title="Create a household" hint="Start a shared space and invite members." />
           <form className="inline-form" onSubmit={createHousehold}>
             <input placeholder="Household name" aria-label="Household name" value={createName} onChange={(event) => setCreateName(event.target.value)} minLength={2} maxLength={60} required />
-            <button className="household-primary-button" disabled={busy}>Create <ArrowUpRight size={15} /></button>
+            <button className="household-primary-button" disabled={busy}>Create <ArrowUpRight size={14} /></button>
           </form>
         </article>
         <article className="household-section glass-panel">
           <SectionHeading icon={UserPlus} title="Join a household" hint="Ask the owner to let you in." />
           <form className="inline-form" onSubmit={requestToJoin}>
             <input placeholder="Household name" aria-label="Household name to join" value={joinName} onChange={(event) => setJoinName(event.target.value)} minLength={2} maxLength={60} required />
-            <button className="secondary-button" disabled={busy}>Request to join <ArrowUpRight size={15} /></button>
+            <button className="secondary-button" disabled={busy}>Request to join <ArrowUpRight size={14} /></button>
           </form>
         </article>
       </div>
@@ -163,10 +163,10 @@ export default function Household() {
               <h2>{household.name}</h2>
               <p>{members.length} {members.length === 1 ? 'member' : 'members'}</p>
             </div>
-            <span className={`household-role ${isOwner ? 'is-owner' : ''}`}>{isOwner && <Crown size={13} />}{isOwner ? 'Owner' : 'Member'}</span>
+            <span className={`household-role ${isOwner ? 'is-owner' : ''}`}>{isOwner && <Crown size={12} />}{isOwner ? 'Owner' : 'Member'}</span>
           </header>
 
-          {/* 2. Needs your action: floats up to sit under the hero when there are requests */}
+          {/* 2. Needs your action */}
           {isOwner && <section className={`household-section glass-panel ${requests.length ? 'is-attention' : 'is-quiet'}`}>
             <SectionHeading
               icon={Mail}
@@ -196,21 +196,21 @@ export default function Household() {
               {members.map((member) => <div className="household-member" key={member.user_id}>
                 <span className="household-member-avatar">{(member.users?.username || '?').slice(0, 1).toUpperCase()}</span>
                 <span className="household-member-name">{member.users?.username || 'Member'}</span>
-                {member.role === 'owner' && <span className="household-role is-owner is-small"><Crown size={12} />Owner</span>}
+                {member.role === 'owner' && <span className="household-role is-owner is-small"><Crown size={11} />Owner</span>}
               </div>)}
             </div>
           </section>
 
           {/* 4. Invite someone */}
           <section className="household-section glass-panel">
-            <SectionHeading icon={UserPlus} title="Invite someone" hint="Enter their username. They can accept from their own Household page." />
+            <SectionHeading icon={UserPlus} title="Invite someone" hint="Enter their username." />
             <form className="inline-form" onSubmit={(event) => invite(event, household.id)}>
               <input placeholder="Username" aria-label="Username to invite" value={inviteNames[household.id] || ''} onChange={(event) => setInviteNames((current) => ({ ...current, [household.id]: event.target.value }))} required />
-              <button className="household-primary-button" disabled={busy}><UserPlus size={15} /> Send invite</button>
+              <button className="household-primary-button" disabled={busy}><UserPlus size={14} /> Send invite</button>
             </form>
           </section>
 
-          {/* 5. Waiting on others: deliberately quiet */}
+          {/* 5. Waiting on others */}
           <section className="household-section glass-panel is-quiet">
             <SectionHeading icon={Clock} title="Sent invitations" hint="Waiting for a reply." count={pending.length} />
             {pending.length ? <div className="household-pending-list">
@@ -221,13 +221,13 @@ export default function Household() {
             </div> : <p className="household-empty">No pending invitations.</p>}
           </section>
 
-          {/* 6. Destructive action: separated and low-key */}
+          {/* 6. Destructive action */}
           <footer className="household-leave-zone">
             <div>
               <strong>Leave this household</strong>
-              <p>You will lose access to its shared expenses.</p>
+              <p>You will lose access to shared expenses.</p>
             </div>
-            <button type="button" className="household-leave-button" disabled={busy} onClick={() => leaveHousehold(household)}><LogOut size={14} /> Leave</button>
+            <button type="button" className="household-leave-button" disabled={busy} onClick={() => leaveHousehold(household)}><LogOut size={13} /> Leave</button>
           </footer>
         </div>
       })}

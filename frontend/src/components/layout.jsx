@@ -1,8 +1,7 @@
 import { useLayoutEffect, useRef, useState } from 'react'
-import { useLocation, useNavigate, useOutlet, Link } from 'react-router-dom'
+import { useLocation, useNavigate, useOutlet } from 'react-router-dom'
 import { useAuth } from '../context/authContext'
 import NavBar from './NavBar'
-import CoinIcon from './CoinIcon'
 import Login from '../pages/login'
 import './Layout.css'
 
@@ -84,8 +83,6 @@ export default function Layout() {
     if (next) navigate(next)
   }
 
-  const transitioningFromDashboard = pageTransition?.direction === 'settings-enter'
-
   return <div className="app-shell">
     <main className="main-content" onTouchStart={(event) => {
       const touch = event.touches[0]
@@ -101,12 +98,7 @@ export default function Layout() {
         <div className="settings-slide-layer settings-slide-out-left"><div className="main-content settings-slide-content">{pageTransition.from}</div></div>
       </>}
     </main>
-    {(location.pathname === '/' || transitioningFromDashboard) && !logoutPage && (
-      <Link to="/settings" className="dashboard-settings-coin" aria-label="Open settings" title="Settings">
-        <span className="brand-mark"><CoinIcon size={28} /></span>
-      </Link>
-    )}
-    {!logoutPage && <NavBar />}
+    {!logoutPage && location.pathname !== '/settings' && <NavBar />}
     {logoutPage && <div className="settings-logout-transition">
       <div className="logout-login-base"><div className="main-content"><Login /></div></div>
       <div className="settings-slide-layer settings-slide-out-right"><div className="main-content settings-slide-content">{logoutPage}</div></div>

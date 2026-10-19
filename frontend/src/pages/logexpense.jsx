@@ -5,6 +5,7 @@ import { useAuth } from '../context/authContext'
 import { api, post } from '../lib/api'
 import { getCachedTransactions, setCachedTransactions } from '../lib/transactionCache'
 import { EXPENSE_CATEGORIES, INCOME_CATEGORIES } from '../utils/constants'
+import AuroraBackground from '../components/AuroraBackground'
 import './logexpense.css'
 
 const CATEGORY_ACTION = '__add_category__'
@@ -79,7 +80,7 @@ export default function LogExpense() {
     finally { setBusy(false) }
   }
 
-  return <section className="page form-page">
+  return <AuroraBackground tone={type}><section className="page form-page">
     <div className="page-heading-row"><div><h1>Log transaction</h1><p className="page-intro">This will be added to <strong>{space.name}</strong>.</p></div></div>
     <form className={`entry-card glass-panel ${type}-entry-card`} onSubmit={submit}>
       <div className="field-label-row"><span className="field-label">TRANSACTION TYPE</span><span className="required-hint">REQUIRED</span></div>
@@ -96,5 +97,5 @@ export default function LogExpense() {
       {error && <p role="alert" className="notice error-notice">{error}</p>}{success && <p role="status" className="notice success-notice"><Check size={16}/> Transaction saved. Opening your history…</p>}
       <button className="primary-button submit-button" disabled={busy || success || savingCategory}>{busy ? 'Saving…' : `Save ${type}`}</button>
     </form>
-  </section>
+  </section></AuroraBackground>
 }

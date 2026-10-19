@@ -24,23 +24,6 @@
   opacity: .45;
 }
 
-.dashboard-settings-coin {
-  position: fixed;
-  z-index: 15;
-  top: 16px;
-  left: max(18px, calc((100vw - 1120px) / 2));
-  width: 44px;
-  height: 44px;
-  display: grid;
-  place-items: center;
-  border-radius: 16px;
-  transition: transform 180ms ease;
-}
-
-.dashboard-settings-coin:hover {
-  transform: translateY(-2px) rotate(-5deg);
-}
-
 .brand-mark {
   width: 44px;
   height: 44px;
@@ -112,13 +95,6 @@
 @media (max-width: 600px) {
   .main-content {
     padding: 39px 21px calc(111px + env(safe-area-inset-bottom));
-  }
-
-  .dashboard-settings-coin {
-    top: 12px;
-    left: 13px;
-    width: 38px;
-    height: 38px;
   }
 
   .brand-mark {

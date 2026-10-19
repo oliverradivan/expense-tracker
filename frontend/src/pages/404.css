@@ -40,16 +40,6 @@
   border-radius: 40px;
   text-align: center;
   color: #111111;
-  background:
-    var(--lg-sheen),
-    var(--lg-fill),
-    var(--lg-base);
-  box-shadow: var(--lg-rim), var(--lg-drop);
-  -webkit-backdrop-filter: var(--lg-refract-panel) blur(var(--lg-blur-panel))
-    saturate(var(--lg-sat)) brightness(var(--lg-bright));
-  backdrop-filter: var(--lg-refract-panel) blur(var(--lg-blur-panel))
-    saturate(var(--lg-sat)) brightness(var(--lg-bright));
-  animation: floatIn 0.5s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .not-found-card h1 {
@@ -94,18 +84,6 @@
 .not-found-card .primary-btn:focus-visible {
   outline: 3px solid #297e62;
   outline-offset: 3px;
-}
-
-@keyframes floatIn {
-  from {
-    opacity: 0;
-    transform: translateY(12px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }
 
 @media (max-width: 480px) {
