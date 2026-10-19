@@ -21,6 +21,9 @@ def list_spaces(user=Depends(current_user)):
     for x in memberships:
         household = {**(x.get("households") or {}), "role": x["role"]}
         household["members"] = d.table("household_members").select("user_id,role,users(username)").eq("household_id", x["household_id"]).execute().data
+        household["pending_invitations"] = d.table("household_invitations").select(
+            "id,invitee_id,created_at,users!household_invitations_invitee_id_fkey(username)"
+        ).eq("household_id", x["household_id"]).eq("status", "pending").order("created_at").execute().data
         spaces.append(household)
     return {"households": spaces, "invitations": invitations}
 
@@ -28,7 +31,10 @@ def list_spaces(user=Depends(current_user)):
 def create(body: dict, user=Depends(current_user)):
     name = str(body.get("name", "")).strip()
     if not 2 <= len(name) <= 60: raise HTTPException(400, "Household name must be 2–60 characters")
-    d = db(); h = d.table("households").insert({"name": name, "created_by": user["id"]}).execute().data[0]
+    d = db()
+    if d.table("household_members").select("id").eq("user_id", user["id"]).limit(1).execute().data:
+        raise HTTPException(409, "Leave your current household before creating another")
+    h = d.table("households").insert({"name": name, "created_by": user["id"]}).execute().data[0]
     d.table("household_members").insert({"household_id": h["id"], "user_id": user["id"], "role": "owner"}).execute()
     return h
 
@@ -38,6 +44,8 @@ def request_to_join(body: dict, user=Depends(current_user)):
     if not 2 <= len(name) <= 60:
         raise HTTPException(400, "Enter a household name between 2 and 60 characters")
     d = db()
+    if d.table("household_members").select("id").eq("user_id", user["id"]).limit(1).execute().data:
+        raise HTTPException(409, "Leave your current household before requesting to join another")
     matches = d.rpc("find_expense_household", {"p_name": name}).execute().data or []
     if not matches:
         raise HTTPException(404, "No household found with that name")
@@ -84,6 +92,9 @@ def respond_to_join_request(request_id: str, action: str, user=Depends(current_u
         already_member = d.table("household_members").select("id").eq("household_id", request["household_id"]).eq("user_id", request["requester_id"]).limit(1).execute().data
         if already_member:
             raise HTTPException(409, "This person is already a household member")
+        in_another_household = d.table("household_members").select("id").eq("user_id", request["requester_id"]).limit(1).execute().data
+        if in_another_household:
+            raise HTTPException(409, "This person must leave their current household first")
         d.table("household_members").insert({"household_id": request["household_id"], "user_id": request["requester_id"], "role": "member"}).execute()
     d.table("household_join_requests").update({"status": "accepted" if action == "accept" else "declined", "responded_at": datetime.now(timezone.utc).isoformat()}).eq("id", request_id).eq("status", "pending").execute()
     return {"ok": True}
@@ -108,6 +119,8 @@ def respond(iid: str, action: str, user=Depends(current_user)):
     d = db(); rows = d.table("household_invitations").select("id,household_id,status").eq("id", iid).eq("invitee_id", user["id"]).eq("status", "pending").limit(1).execute().data
     if not rows: raise HTTPException(404, "Pending invitation not found")
     if action == "accept":
+        if d.table("household_members").select("id").eq("user_id", user["id"]).limit(1).execute().data:
+            raise HTTPException(409, "Leave your current household before accepting another invitation")
         d.table("household_members").insert({"household_id": rows[0]["household_id"], "user_id": user["id"], "role": "member"}).execute()
     d.table("household_invitations").update({"status": "accepted" if action == "accept" else "declined", "responded_at": datetime.now(timezone.utc).isoformat()}).eq("id", iid).execute()
     return {"ok": True}

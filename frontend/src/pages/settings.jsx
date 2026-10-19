@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
-import { Check, Eye, EyeOff, KeyRound, Monitor, Moon, Pencil, Plus, Sun, Trash2, X } from 'lucide-react'
+import { useNavigate, useOutletContext } from 'react-router-dom'
+import { ArrowLeft, ArrowRight, Check, Eye, EyeOff, KeyRound, Monitor, Moon, Pencil, Plus, Sun, Trash2, X } from 'lucide-react'
 import { api, post } from '../lib/api'
 import { useAuth } from '../context/authContext'
 import { useTheme } from '../context/themecontext'
@@ -10,7 +11,9 @@ function Feedback({ error, ok }) {
 }
 
 export default function Settings() {
-  const { user, space } = useAuth()
+  const { user, space, signOut } = useAuth()
+  const { onLogout } = useOutletContext()
+  const navigate = useNavigate()
   const { mode, setTheme } = useTheme()
   const [passwords, setPasswords] = useState({ current_password: '', new_password: '' })
   const [error, setError] = useState('')
@@ -93,7 +96,11 @@ export default function Settings() {
 
   const visibleCategories = categories.filter(item => item.type === categoryType)
   return <section className="page settings-page">
-    <div className="page-heading-row"><div><h1>Settings</h1><p className="page-intro">Signed in as <strong>{user?.username}</strong>.</p></div></div>
+    <div className="settings-page-header">
+      <button type="button" className="settings-header-arrow settings-logout-arrow" aria-label="Log out" title="Log out" onClick={onLogout}><ArrowLeft size={21}/></button>
+      <div><h1>Settings</h1><p className="page-intro">Signed in as <strong>{user?.username}</strong>.</p></div>
+      <button type="button" className="settings-header-arrow settings-dashboard-arrow" aria-label="Return to dashboard" title="Dashboard" onClick={() => navigate('/')}><ArrowRight size={21}/></button>
+    </div>
     <div className="settings-tabs" role="tablist" aria-label="Settings sections"><button type="button" role="tab" aria-selected={tab === 'preferences'} className={tab === 'preferences' ? 'active' : ''} onClick={() => setTab('preferences')}>Preferences</button><button type="button" role="tab" aria-selected={tab === 'categories'} className={tab === 'categories' ? 'active' : ''} onClick={() => setTab('categories')}>Categories</button><button type="button" role="tab" aria-selected={tab === 'account'} className={tab === 'account' ? 'active' : ''} onClick={() => setTab('account')}>Account</button></div>
     <Feedback error={error} ok={ok}/>
     {tab === 'preferences' && <>

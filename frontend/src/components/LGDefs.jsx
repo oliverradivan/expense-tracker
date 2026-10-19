@@ -1,17 +1,17 @@
 import { useEffect } from 'react'
 
-function buildMap(edgeX, edgeY = edgeX) {
-  const nearX = edgeX
-  const farX = 100 - edgeX
-  const nearY = edgeY
-  const farY = 100 - edgeY
+// The red and green channels describe horizontal and vertical movement.
+// A flat center and stronger outer edge make the backdrop bulge like a lens.
+function buildMap(flatEdge = 18) {
+  const inner = flatEdge
+  const outer = 100 - flatEdge
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
     <defs>
       <linearGradient id="x" x1="0" y1="0" x2="1" y2="0">
-        <stop offset="0%" stop-color="rgb(255,0,0)"/><stop offset="${nearX}%" stop-color="rgb(128,0,0)"/><stop offset="${farX}%" stop-color="rgb(128,0,0)"/><stop offset="100%" stop-color="rgb(0,0,0)"/>
+        <stop offset="0%" stop-color="rgb(0,0,0)"/><stop offset="${inner}%" stop-color="rgb(118,0,0)"/><stop offset="50%" stop-color="rgb(128,0,0)"/><stop offset="${outer}%" stop-color="rgb(138,0,0)"/><stop offset="100%" stop-color="rgb(255,0,0)"/>
       </linearGradient>
       <linearGradient id="y" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stop-color="rgb(0,255,0)"/><stop offset="${nearY}%" stop-color="rgb(0,128,0)"/><stop offset="${farY}%" stop-color="rgb(0,128,0)"/><stop offset="100%" stop-color="rgb(0,0,0)"/>
+        <stop offset="0%" stop-color="rgb(0,0,0)"/><stop offset="${inner}%" stop-color="rgb(0,118,0)"/><stop offset="50%" stop-color="rgb(0,128,0)"/><stop offset="${outer}%" stop-color="rgb(0,138,0)"/><stop offset="100%" stop-color="rgb(0,255,0)"/>
       </linearGradient>
     </defs>
     <rect width="100" height="100" fill="rgb(0,0,0)"/><rect width="100" height="100" fill="url(#x)"/><rect width="100" height="100" fill="url(#y)" style="mix-blend-mode:screen"/>
@@ -19,9 +19,29 @@ function buildMap(edgeX, edgeY = edgeX) {
   return `data:image/svg+xml,${encodeURIComponent(svg)}`
 }
 
-const PANEL_MAP = buildMap(5)
-const CONTROL_MAP = buildMap(24)
-const BAR_MAP = buildMap(6, 28)
+const PANEL_MAP = buildMap(20)
+const CONTROL_MAP = buildMap(27)
+const BAR_MAP = buildMap(22)
+
+function ChannelRefraction({ map, id, control = false }) {
+  const split = (channel, result) => <feColorMatrix in="SourceGraphic" type="matrix" values={channel === 'R'
+    ? '1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0'
+    : channel === 'G'
+      ? '0 0 0 0 0  0 1 0 0 0  0 0 0 0 0  0 0 0 1 0'
+      : '0 0 0 0 0  0 0 0 0 0  0 0 1 0 0  0 0 0 1 0'} result={result} />
+
+  return <filter id={id} x="-12%" y="-12%" width="124%" height="124%" colorInterpolationFilters="sRGB">
+    <feImage href={map} preserveAspectRatio="none" result="map" />
+    {split('R', 'red')}
+    {split('G', 'green')}
+    {split('B', 'blue')}
+    <feDisplacementMap in="red" in2="map" scale={control ? 'var(--lg-control-refraction-strength, 10)' : 'var(--lg-refraction-strength, 24)'} xChannelSelector="R" yChannelSelector="G" result="redBent" />
+    <feDisplacementMap in="green" in2="map" scale={control ? 'var(--lg-control-refraction-strength, 10)' : 'calc(var(--lg-refraction-strength, 24) - var(--lg-aberration-strength, 2))'} xChannelSelector="R" yChannelSelector="G" result="greenBent" />
+    <feDisplacementMap in="blue" in2="map" scale={control ? 'var(--lg-control-refraction-strength, 10)' : 'calc(var(--lg-refraction-strength, 24) - var(--lg-aberration-strength, 2) - var(--lg-aberration-strength, 2))'} xChannelSelector="R" yChannelSelector="G" result="blueBent" />
+    <feBlend in="redBent" in2="greenBent" mode="screen" result="rg" />
+    <feBlend in="rg" in2="blueBent" mode="screen" />
+  </filter>
+}
 
 function LiquidGlassDefs() {
   useEffect(() => {
@@ -37,18 +57,9 @@ function LiquidGlassDefs() {
 
   return <svg className="lg-defs" width="0" height="0" aria-hidden="true" focusable="false">
     <defs>
-      <filter id="lg-refract-panel" x="0" y="0" width="100%" height="100%" colorInterpolationFilters="sRGB">
-        <feImage href={PANEL_MAP} preserveAspectRatio="none" result="map" />
-        <feDisplacementMap in="SourceGraphic" in2="map" scale="64" xChannelSelector="R" yChannelSelector="G" />
-      </filter>
-      <filter id="lg-refract-control" x="0" y="0" width="100%" height="100%" colorInterpolationFilters="sRGB">
-        <feImage href={CONTROL_MAP} preserveAspectRatio="none" result="map" />
-        <feDisplacementMap in="SourceGraphic" in2="map" scale="34" xChannelSelector="R" yChannelSelector="G" />
-      </filter>
-      <filter id="lg-refract-bar" x="0" y="0" width="100%" height="100%" colorInterpolationFilters="sRGB">
-        <feImage href={BAR_MAP} preserveAspectRatio="none" result="map" />
-        <feDisplacementMap in="SourceGraphic" in2="map" scale="36" xChannelSelector="R" yChannelSelector="G" />
-      </filter>
+      <ChannelRefraction id="lg-refract-panel" map={PANEL_MAP} />
+      <ChannelRefraction id="lg-refract-control" map={CONTROL_MAP} control />
+      <ChannelRefraction id="lg-refract-bar" map={BAR_MAP} control />
     </defs>
   </svg>
 }

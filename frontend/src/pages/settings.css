@@ -27,3 +27,12 @@
 .account-actions-label{color:var(--muted);font-size:11px}
 .account-actions .delete-button{color:var(--danger)}
 .expense-categories{--category-color:var(--danger);--category-soft:var(--danger-soft)}.income-categories{--category-color:var(--income);--category-soft:var(--income-soft)}.category-settings-section .settings-category-row{background:color-mix(in srgb,var(--glass-fill) 86%,var(--category-soft));border-color:color-mix(in srgb,var(--glass-border) 70%,var(--category-color) 30%)}.category-settings-section .settings-category-tabs button.chosen{color:var(--category-color);background:var(--category-soft);border-color:color-mix(in srgb,var(--category-color) 38%,var(--line))}.category-settings-section .category-create-form input:focus{border-color:var(--category-color)}
+
+.settings-page-header{display:grid;grid-template-columns:40px minmax(0,1fr) 40px;align-items:center;gap:12px;margin:0 0 27px}
+.settings-page-header h1{font-size:clamp(34px,5vw,48px);letter-spacing:-.05em;margin:0}
+.settings-page-header .page-intro{margin-top:7px}
+.settings-header-arrow{width:40px;height:40px;display:grid;place-items:center;border:1px solid var(--glass-border);border-radius:13px;background:var(--glass-fill);color:var(--ink);cursor:pointer;transition:transform .16s ease,background .16s ease}
+.settings-header-arrow:hover{transform:translateY(-1px);background:var(--surface)}
+.settings-logout-arrow{color:var(--danger)}
+.settings-logout-arrow:hover{background:color-mix(in srgb,var(--danger) 9%,var(--surface))}
+.settings-dashboard-arrow{justify-self:end}

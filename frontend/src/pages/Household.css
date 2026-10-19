@@ -1,0 +1,505 @@
+/* ==========================================================
+   Household page
+   Hierarchy (loudest to quietest):
+   1. Hero (household name + role)
+   2. Items needing action (join requests / invitations)
+   3. Members + invite form
+   4. Waiting / empty states (quiet)
+   5. Leave (separate, low-key until hovered)
+   ========================================================== */
+
+.household-page {
+  display: grid;
+  gap: 20px;
+}
+
+.household-current-list {
+  display: grid;
+  gap: 32px;
+}
+
+/* One household = one vertical stack of clearly separate cards */
+.household-group {
+  display: grid;
+  gap: 14px;
+}
+
+.household-hero { order: -2; }
+.household-section.is-attention { order: -1; }
+.household-leave-zone { order: 99; }
+
+/* ---------- Shared card ---------- */
+
+.household-section,
+.household-hero {
+  border: 1px solid var(--glass-border);
+  border-radius: 18px;
+  background: var(--glass-fill);
+  backdrop-filter: blur(16px);
+}
+
+.household-section {
+  display: grid;
+  gap: 16px;
+  padding: 20px;
+  min-width: 0;
+}
+
+/* ---------- Hero ---------- */
+
+.household-hero {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 22px 24px;
+  border-color: color-mix(in srgb, var(--accent) 28%, var(--glass-border));
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--accent) 10%, transparent), transparent 70%),
+    var(--glass-fill);
+}
+
+.household-hero-mark {
+  flex: none;
+  width: 52px;
+  height: 52px;
+  display: grid;
+  place-items: center;
+  border-radius: 16px;
+  background: var(--accent);
+  color: #fff;
+  font-size: 22px;
+  font-weight: 800;
+}
+
+.household-hero-text {
+  min-width: 0;
+  flex: 1;
+}
+
+.household-hero-text h2 {
+  margin: 0;
+  overflow: hidden;
+  color: var(--ink);
+  font-size: 24px;
+  font-weight: 750;
+  line-height: 1.2;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.household-hero-text p {
+  margin: 4px 0 0;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+/* ---------- Role / status pills ---------- */
+
+.household-role,
+.household-pill {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 11px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--muted) 14%, transparent);
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 650;
+  white-space: nowrap;
+}
+
+.household-role.is-owner {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.household-role.is-small {
+  margin-left: auto;
+  padding: 3px 9px;
+  font-size: 11px;
+}
+
+/* ---------- Section heading (icon, title, hint, count) ---------- */
+
+.household-section-heading {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.household-section-icon {
+  flex: none;
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border-radius: 11px;
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.household-section-text {
+  min-width: 0;
+  flex: 1;
+}
+
+.household-section-text h3 {
+  margin: 0;
+  color: var(--ink);
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.household-section-text p {
+  margin: 2px 0 0;
+  color: var(--muted);
+  font-size: 12.5px;
+  line-height: 1.45;
+}
+
+.household-count {
+  flex: none;
+  min-width: 28px;
+  height: 28px;
+  padding: 0 8px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--muted) 14%, transparent);
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.household-count.is-attention {
+  background: var(--accent);
+  color: #fff;
+}
+
+/* ---------- Attention state (needs a reply) ---------- */
+
+.household-section.is-attention {
+  border-color: color-mix(in srgb, var(--accent) 55%, transparent);
+  background:
+    linear-gradient(color-mix(in srgb, var(--accent) 8%, transparent), color-mix(in srgb, var(--accent) 8%, transparent)),
+    var(--glass-fill);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 12%, transparent);
+}
+
+.household-section.is-attention .household-section-icon {
+  background: var(--accent);
+  color: #fff;
+}
+
+/* ---------- Quiet state (nothing to do) ---------- */
+
+.household-section.is-quiet {
+  gap: 12px;
+  padding: 16px 20px;
+  background: transparent;
+  backdrop-filter: none;
+  border-style: dashed;
+  border-color: var(--line);
+}
+
+.household-section.is-quiet .household-section-icon {
+  background: transparent;
+  color: var(--muted);
+}
+
+.household-section.is-quiet .household-section-text h3 {
+  color: var(--muted);
+  font-size: 14px;
+  font-weight: 650;
+}
+
+/* ---------- Create / join (signed-out-of-household view) ---------- */
+
+.household-actions-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.household-section .inline-form {
+  min-width: 0;
+}
+
+.household-section .inline-form input {
+  max-width: none;
+  min-width: 0;
+  flex: 1;
+  height: 44px;
+  font-size: 13px;
+}
+
+.household-section .inline-form button {
+  height: 44px;
+  white-space: nowrap;
+}
+
+.household-primary-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 0 18px;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  background: var(--accent);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: filter 160ms ease, opacity 160ms ease;
+}
+
+.household-primary-button:hover:not(:disabled) {
+  filter: brightness(1.1);
+}
+
+.household-primary-button:disabled {
+  opacity: .55;
+  cursor: wait;
+}
+
+/* ---------- Lists and rows ---------- */
+
+.household-list,
+.household-pending-list {
+  display: grid;
+  gap: 8px;
+}
+
+.household-row,
+.household-pending-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 13px 14px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface);
+}
+
+.household-row-main {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+}
+
+.household-row-main strong {
+  overflow: hidden;
+  color: var(--ink);
+  font-size: 14px;
+  font-weight: 700;
+  text-overflow: ellipsis;
+}
+
+.household-row-main small {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.household-row-actions {
+  display: flex;
+  flex: none;
+  gap: 8px;
+}
+
+.household-row-actions button,
+.household-leave-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 36px;
+  padding: 0 14px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 160ms ease, color 160ms ease, border-color 160ms ease;
+}
+
+/* Positive action = solid. Negative action = outlined. Clear difference in weight. */
+.household-join-button {
+  background: #21834a;
+  color: #fff;
+}
+
+.household-join-button:hover:not(:disabled) {
+  background: #176b3a;
+}
+
+.household-decline-button,
+.household-leave-button {
+  background: transparent;
+  border-color: color-mix(in srgb, var(--danger) 35%, transparent) !important;
+  color: var(--danger);
+}
+
+.household-decline-button:hover:not(:disabled),
+.household-leave-button:hover:not(:disabled) {
+  background: var(--danger);
+  color: #fff;
+}
+
+.household-row-actions button:disabled,
+.household-leave-button:disabled {
+  opacity: .55;
+  cursor: wait;
+}
+
+/* Waiting items: smaller, softer */
+.household-pending-row {
+  padding: 9px 12px;
+  background: transparent;
+  border-style: dashed;
+}
+
+.household-pending-row span {
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.household-pill {
+  padding: 3px 10px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.household-empty {
+  margin: 0;
+  color: var(--muted);
+  font-size: 12.5px;
+}
+
+/* ---------- Members ---------- */
+
+.household-members-list {
+  display: grid;
+  gap: 4px;
+}
+
+.household-member {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 48px;
+  padding: 6px 10px;
+  border-radius: 12px;
+  font-size: 14px;
+}
+
+.household-member + .household-member {
+  border-top: 1px solid var(--line);
+  border-radius: 0 0 12px 12px;
+}
+
+.household-member-avatar {
+  flex: none;
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.household-member-name {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--ink);
+  font-weight: 650;
+  text-overflow: ellipsis;
+}
+
+/* ---------- Leave zone ---------- */
+
+.household-leave-zone {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 6px;
+  padding: 14px 4px 0;
+  border-top: 1px solid var(--line);
+}
+
+.household-leave-zone strong {
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 650;
+}
+
+.household-leave-zone p {
+  margin: 2px 0 0;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+/* ---------- Keyboard focus ---------- */
+
+.household-row-actions button:focus-visible,
+.household-leave-button:focus-visible,
+.household-primary-button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 700px) {
+  .household-actions-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .household-section {
+    padding: 16px;
+  }
+
+  .household-hero {
+    padding: 18px;
+  }
+
+  .household-hero-text h2 {
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .household-hero {
+    flex-wrap: wrap;
+  }
+
+  .household-row {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .household-row-actions {
+    justify-content: flex-end;
+  }
+
+  .household-section .inline-form {
+    flex-wrap: wrap;
+  }
+
+  .household-section .inline-form button {
+    width: 100%;
+  }
+
+  .household-leave-zone {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}

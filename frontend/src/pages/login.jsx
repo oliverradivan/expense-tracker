@@ -2,14 +2,13 @@ import { useState } from 'react'
 import { Eye, EyeOff } from 'lucide-react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/authContext'
-import CoinIcon from '../components/CoinIcon'
 import './login.css'
 
 function AuthShell({ title, subtitle, children, footer }) {
   return (
     <main className="auth-screen">
       <div className="auth-brand">
-        <CoinIcon size={33} />fathom
+        fathom
       </div>
       <div className="auth-panel glass-panel">
         <h1>{title}</h1>

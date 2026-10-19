@@ -10,6 +10,7 @@ import History from './pages/history'
 import LogExpense from './pages/logexpense'
 import MIR from './pages/MIR'
 import Settings from './pages/settings'
+import Household from './pages/Household'
 import NotFoundPage from './pages/404'
 import LGDefs from './components/LGDefs'
 import './App.css'
@@ -29,7 +30,7 @@ export default function App() {
 
   useEffect(() => { const timer = setTimeout(() => setIntroComplete(true), 620); return () => clearTimeout(timer) }, [])
 
-  // When the app is ready, fly the splash coin to the logo spot in the top bar, then remove the splash
+  // When the app is ready on Dashboard, fly the splash coin to the Settings shortcut.
   useLayoutEffect(() => {
     if (!ready || splashGone) return
     const splash = splashRef.current
@@ -48,7 +49,7 @@ export default function App() {
     }
 
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    // No splash, no top bar (e.g. login page) or reduced motion: just leave
+    // No splash, no Dashboard coin target, or reduced motion: just leave.
     if (!splash || !mark || !target || reduceMotion) { finish(); return }
 
     splash.classList.add('startup-leaving')
@@ -93,6 +94,7 @@ export default function App() {
           <Route path="/log" element={<LogExpense />} />
           <Route path="/review" element={<MIR />} />
           <Route path="/settings" element={<Settings />} />
+          <Route path="/household" element={<Household />} />
         </Route>
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
