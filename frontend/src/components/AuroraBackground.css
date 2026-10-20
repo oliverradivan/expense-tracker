@@ -10,24 +10,24 @@
   --aurora-income: #3fae62;   /* green */
 
   --aurora-bg: #f7f8f7;
-  --aurora-blob-opacity: 0.6;
-  --aurora-blur: 70px;
+  --aurora-blob-opacity: 0.18;
+  --aurora-blur: 48px;
 
   --aurora-tone: var(--aurora-base);
 }
 
 .dark .aurora {
   --aurora-bg: #0c0e11;
-  --aurora-blob-opacity: 0.85;
-  --aurora-blur: 80px;
+  --aurora-blob-opacity: 0.24;
+  --aurora-blur: 54px;
 }
 
 .aurora--active {
-  --aurora-blob-opacity: 0.8;
+  --aurora-blob-opacity: 0.22;
 }
 
 .dark .aurora--active {
-  --aurora-blob-opacity: 1;
+  --aurora-blob-opacity: 0.28;
 }
 
 .aurora[data-tone="expense"] { --aurora-tone: var(--aurora-expense); }

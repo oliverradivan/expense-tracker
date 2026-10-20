@@ -268,7 +268,7 @@ export function startAuroraField(canvas, root, getParams) {
     colors = mixRgb(colors, target, 1 - Math.exp(-dt * COLOUR_RATE))
     shared.colors = colors
 
-    const intensity = Math.min((dark ? 0.8 : 0.6) * (active ? 1.15 : 1), 1)
+    const intensity = Math.min((dark ? 0.22 : 0.16) * (active ? 1.1 : 1), 1)
     // higher = more swirly / stretched-out shapes
     const warp = active ? 1.1 : 0.9
 

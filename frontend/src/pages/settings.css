@@ -211,6 +211,10 @@
   margin: 0 0 12px;
 }
 
+.page.settings-page {
+  animation: none;
+}
+
 @media (max-width: 660px) {
   .settings-section {
     grid-template-columns: 1fr;

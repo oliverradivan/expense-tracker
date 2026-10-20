@@ -21,7 +21,6 @@ import {
 import { api, post } from '../lib/api'
 import { useAuth } from '../context/authContext'
 import { useTheme } from '../context/themecontext'
-import AuroraBackground from '../components/AuroraBackground'
 import './settings.css'
 
 function Feedback({ error, ok }) {
@@ -202,11 +201,7 @@ export default function Settings() {
 
   const visibleCategories = categories.filter(item => item.type === categoryType)
 
-  // Orange by default; red / green while managing expense / income categories.
-  const auroraTone = tab === 'categories' ? categoryType : undefined
-
   return (
-    <AuroraBackground tone={auroraTone}>
       <section className="page settings-page">
         {/* Header */}
         <div className="settings-page-header">
@@ -484,6 +479,5 @@ export default function Settings() {
           </>
         )}
       </section>
-    </AuroraBackground>
   )
 }

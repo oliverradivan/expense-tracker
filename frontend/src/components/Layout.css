@@ -59,7 +59,7 @@
 }
 
 .settings-slide-out-left {
-  animation: settings-exit-to-left 300ms cubic-bezier(.22,.78,.22,1) both;
+  animation: settings-exit-to-left 560ms cubic-bezier(.22,.78,.22,1) both;
 }
 
 .settings-logout-transition {
@@ -108,9 +108,6 @@
     height: 25px;
   }
 
-  .settings-slide-content {
-    padding: 34px 19px calc(111px + env(safe-area-inset-bottom));
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {

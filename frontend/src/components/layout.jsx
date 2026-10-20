@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef, useState } from 'react'
+import { useCallback, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { useLocation, useNavigate, useOutlet } from 'react-router-dom'
 import { useAuth } from '../context/authContext'
 import NavBar from './NavBar'
@@ -6,6 +6,7 @@ import Login from '../pages/login'
 import './Layout.css'
 
 const SLIDE_MS = 300
+const SETTINGS_EXIT_MS = 560
 
 export default function Layout() {
   const { signOut } = useAuth()
@@ -13,17 +14,11 @@ export default function Layout() {
   const location = useLocation()
   const [pageTransition, setPageTransition] = useState(null)
   const [logoutPage, setLogoutPage] = useState(null)
-  const activePage = useRef(null)
+  const activePage = useRef({ path: null, element: null })
   const timer = useRef(null)
   const logoutTimer = useRef(null)
   const touchStart = useRef(null)
-  const outlet = useOutlet({ onLogout: beginLogout })
-  const pages = ['/', '/history', '/log', '/review', '/household']
-
-  if (!activePage.current) activePage.current = { path: location.pathname, element: outlet }
-  if (!pageTransition && activePage.current.path === location.pathname) activePage.current.element = outlet
-
-  function beginLogout() {
+  const beginLogout = useCallback(() => {
     if (logoutTimer.current) return
     const settingsPage = activePage.current?.element
     setLogoutPage(settingsPage)
@@ -32,32 +27,44 @@ export default function Layout() {
       navigate('/login', { replace: true })
       logoutTimer.current = null
     }, SLIDE_MS)
-  }
+  }, [navigate, signOut])
+  const outletContext = useMemo(() => ({ onLogout: beginLogout }), [beginLogout])
+  const outlet = useOutlet(outletContext)
+  const outletRef = useRef(outlet)
+  const pages = ['/', '/history', '/log', '/review', '/household']
+
+  useLayoutEffect(() => {
+    outletRef.current = outlet
+  }, [outlet])
 
   useLayoutEffect(() => {
     const previous = activePage.current
-    if (!previous || previous.path === location.pathname) {
-      activePage.current = { path: location.pathname, element: outlet }
+    if (!previous.path || previous.path === location.pathname) {
+      activePage.current = { path: location.pathname, element: previous.element || outletRef.current }
       return undefined
     }
 
     const fromDashboardToSettings = previous.path === '/' && location.pathname === '/settings'
     const fromSettingsToDashboard = previous.path === '/settings' && location.pathname === '/'
     if (fromDashboardToSettings || fromSettingsToDashboard) {
+      const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+      const transitionDuration = reducedMotion
+        ? 1
+        : fromSettingsToDashboard ? SETTINGS_EXIT_MS : SLIDE_MS
       window.clearTimeout(timer.current)
       setPageTransition({
         direction: fromDashboardToSettings ? 'settings-enter' : 'settings-exit',
         from: previous.element,
-        to: outlet,
+        to: outletRef.current,
       })
-      activePage.current = { path: location.pathname, element: outlet }
+      activePage.current = { path: location.pathname, element: outletRef.current }
       timer.current = window.setTimeout(() => {
         setPageTransition(null)
-      }, SLIDE_MS)
+      }, transitionDuration)
       return () => window.clearTimeout(timer.current)
     }
 
-    activePage.current = { path: location.pathname, element: outlet }
+    activePage.current = { path: location.pathname, element: outletRef.current }
     setPageTransition(null)
     return undefined
   }, [location.pathname])
