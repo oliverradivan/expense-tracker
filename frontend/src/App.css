@@ -265,99 +265,6 @@
   background: var(--bg);
 }
 
-.startup-spirit-track {
-  position: absolute;
-  z-index: 0;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-}
-
-.startup-spirit-orbit {
-  transform-box: view-box;
-  transform-origin: center;
-  animation: spirit-whirl 9s linear infinite;
-  will-change: transform, opacity;
-}
-
-.startup-spirit-ribbons {
-  transform-box: view-box;
-  transform-origin: 500px 45px;
-  animation: spirit-undulate 4.8s ease-in-out infinite alternate;
-}
-
-.startup-ribbon-glow,
-.startup-ribbon-main,
-.startup-ribbon-highlight,
-.startup-ribbon-wisp {
-  fill: url(#startup-spirit-ribbon);
-}
-
-.startup-ribbon-glow {
-  opacity: .32;
-  filter: blur(11px);
-}
-
-.startup-ribbon-main {
-  opacity: .88;
-  filter: drop-shadow(0 0 11px rgb(242 140 40 / 20%));
-}
-
-.startup-ribbon-highlight {
-  fill: url(#startup-spirit-wisp);
-  opacity: .72;
-}
-
-.startup-ribbon-wisp {
-  opacity: .63;
-}
-
-.startup-ribbon-wisp-one {
-  animation: spirit-wisp-flow 3.6s ease-in-out infinite alternate;
-}
-
-.startup-ribbon-wisp-two {
-  animation: spirit-wisp-flow 4.2s ease-in-out -1.8s infinite alternate-reverse;
-}
-
-.startup-ribbon-thread {
-  fill: none;
-  stroke: url(#startup-spirit-wisp);
-  stroke-width: 2.4;
-  stroke-linecap: round;
-  stroke-dasharray: 24 36;
-  opacity: .78;
-  animation: spirit-thread-flow 2.6s linear infinite;
-}
-
-.startup-ribbon-thread-two {
-  stroke-width: 1.5;
-  stroke-dasharray: 13 28;
-  opacity: .56;
-  animation-duration: 3.4s;
-  animation-direction: reverse;
-}
-
-.startup-spirit-aura {
-  fill: url(#startup-spirit-core);
-  opacity: .56;
-}
-
-.startup-spirit-sweep {
-  fill: #F28C28;
-  filter: drop-shadow(0 0 8px rgb(255 179 71 / 56%));
-}
-
-.startup-spirit-sweep-inner {
-  fill: #FFF0B8;
-  opacity: .95;
-}
-
-.startup-leaving {
-  pointer-events: none;
-}
-
 .startup p {
   margin: 0;
   color: var(--muted);
@@ -455,34 +362,6 @@
 @keyframes loader-sweep {
   to {
     transform: translateX(100%);
-  }
-}
-
-@keyframes spirit-whirl {
-  to { transform: rotate(360deg); }
-}
-
-@keyframes spirit-undulate {
-  from { transform: rotate(-3deg) scaleX(.96); }
-  to { transform: rotate(3deg) scaleX(1.04); }
-}
-
-@keyframes spirit-wisp-flow {
-  from { opacity: .32; transform: translate(0, 0) scale(.98); }
-  to { opacity: .78; transform: translate(8px, 6px) scale(1.02); }
-}
-
-@keyframes spirit-thread-flow {
-  to { stroke-dashoffset: -120; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .startup-spirit-orbit,
-  .startup-spirit-ribbons,
-  .startup-ribbon-wisp-one,
-  .startup-ribbon-wisp-two,
-  .startup-ribbon-thread {
-    animation: none;
   }
 }
 
