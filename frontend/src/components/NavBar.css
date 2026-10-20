@@ -26,4 +26,9 @@
   .nav-add .nav-icon{height:31px;width:31px}
 }
 
+@media(max-width:600px){
+  .nav-item{gap:0}
+  .nav-label{display:none}
+}
+
 .nav-no-active .nav-slider{opacity:0}

@@ -1,13 +1,13 @@
 import { NavLink, useLocation } from 'react-router-dom'
-import { House, List, Plus, ChartNoAxesColumn, Users } from 'lucide-react'
+import { House, LayoutGrid, List, Plus, ChartNoAxesColumn } from 'lucide-react'
 import './NavBar.css'
 
 const links = [
-  { to: '/', label: 'Dashboard', icon: House, end: true },
+  { to: '/', label: 'Dashboard', icon: LayoutGrid, end: true },
   { to: '/history', label: 'History', icon: List },
   { to: '/log', label: 'Log Expense', icon: Plus, center: true },
   { to: '/review', label: 'Review', icon: ChartNoAxesColumn },
-  { to: '/household', label: 'Household', icon: Users },
+  { to: '/household', label: 'Household', icon: House },
 ]
 
 export default function NavBar() {
@@ -22,6 +22,7 @@ export default function NavBar() {
           key={to} 
           to={to} 
           end={end} 
+          aria-label={label}
           className={({ isActive }) => `nav-item${center ? ' nav-add' : ''}${isActive ? ' active' : ''}`}
         >
           <span className="nav-icon">
