@@ -86,3 +86,50 @@ html[data-theme="dark"] {
     backdrop-filter: blur(var(--lg-blur)) saturate(var(--lg-sat)) brightness(var(--lg-bright)) !important;
   }
 }
+
+/* App-wide matte card treatment for dark mode. Keep the canvas dark while
+   giving panels a consistent light surface and readable dark typography. */
+html[data-theme="dark"] {
+  --card-bg: #fff;
+  --card-ink: #171a18;
+  --card-muted: #626965;
+  --card-line: #e3e6e4;
+}
+
+html[data-theme="dark"] :is(
+  .glass,
+  .glass-panel,
+  .glass-chip,
+  .glass-control,
+  .glass-bar,
+  .dashboard-stat-card,
+  .settings-category-row,
+  .new-category-box
+) {
+  --bg: var(--card-bg) !important;
+  --surface: var(--card-bg) !important;
+  --ink: var(--card-ink) !important;
+  --muted: var(--card-muted) !important;
+  --line: var(--card-line) !important;
+  --accent: #262b28 !important;
+  --accent-soft: #ecefed !important;
+  --danger: #b42332 !important;
+  --danger-soft: #f9e7e9 !important;
+  --income: #16834a !important;
+  --income-soft: #e8f6ed !important;
+  --warm: #404641 !important;
+  --glass-fill: var(--card-bg) !important;
+  --glass-border: var(--card-line) !important;
+  --glass-shadow: 0 6px 18px rgb(0 0 0 / 14%) !important;
+  color: var(--card-ink) !important;
+  border-color: var(--card-line) !important;
+  background: var(--card-bg) !important;
+  box-shadow: 0 6px 18px rgb(0 0 0 / 14%) !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+}
+
+html[data-theme="dark"] :is(.glass-panel, .glass)::before {
+  display: none !important;
+  background: none !important;
+}

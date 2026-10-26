@@ -386,38 +386,6 @@
   color: #fff;
 }
 
-/* Keep household cards solid and softly light in dark mode for clear contrast. */
-html[data-theme="dark"] .household-page .household-section,
-html[data-theme="dark"] .household-page .household-hero {
-  --bg: #f3f5f2;
-  --surface: #fff;
-  --ink: #202522;
-  --muted: #5f6862;
-  --line: #d9dfda;
-  --accent: #303a34;
-  --accent-soft: #e5ebe6;
-  --danger: #b42332;
-  --danger-soft: #f9e7e9;
-  color: var(--ink);
-  border-color: var(--line);
-  background: #f3f5f2;
-  box-shadow: 0 8px 24px rgb(0 0 0 / 18%);
-  backdrop-filter: none;
-  -webkit-backdrop-filter: none;
-}
-
-html[data-theme="dark"] .household-page .household-section.is-attention {
-  border-color: color-mix(in srgb, var(--accent) 35%, var(--line));
-  background: #f3f5f2;
-}
-
-html[data-theme="dark"] .household-page .household-section.is-quiet {
-  background: #f3f5f2;
-}
-
-html[data-theme="dark"] .household-page .household-hero {
-  background: #f3f5f2;
-}
 
 .household-pending-row {
   padding: 8px 10px;
