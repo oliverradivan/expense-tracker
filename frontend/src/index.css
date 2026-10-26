@@ -29,16 +29,16 @@
 
 html[data-theme="dark"] {
   color-scheme: dark;
-  --bg: #211F1A;
-  --page-background-expense: #2D2220;
-  --page-background-income: #20291F;
-  --surface: #151718;
-  --ink: #f1f2f2;
-  --muted: #a2a5a7;
-  --line: #292c2e;
-  --accent: #f1f2f2;
-  --accent-soft: #222527;
-  --warm: #d9dbdc;
+  --bg: #101214;
+  --page-background-expense: #171719;
+  --page-background-income: #141916;
+  --surface: #191c1e;
+  --ink: #e7e9e8;
+  --muted: #a0a5a3;
+  --line: #2a2f31;
+  --accent: #e7e9e8;
+  --accent-soft: #24292b;
+  --warm: #c6cbc8;
   --danger: #ff737d;
   --danger-soft: #301b1e;
   --income: #69d69a;
