@@ -12,14 +12,19 @@
   animation: none;
 }
 
-/* ---- coin (top-left) ---- */
+/* ---- utility row above the welcome message ---- */
+.dashboard-topbar {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
 .dashboard-settings-coin {
-  position: absolute;
-  z-index: 15;
-  top: 16px;
-  left: 16px;
   width: 44px;
   height: 44px;
+  flex: none;
   display: grid;
   place-items: center;
   border-radius: 16px;
@@ -42,13 +47,11 @@
   align-items: center;
   text-align: center;
   gap: 8px;
-  margin: 18px 0 30px;
+  margin: 20px 0 30px;
 }
 
 @media (max-width: 600px) {
   .dashboard-settings-coin {
-    top: 12px;
-    left: 13px;
     width: 38px;
     height: 38px;
   }
@@ -68,13 +71,9 @@
   text-shadow: 0 0 12px rgb(242 140 40 / 18%);
 }
 
-/* date (the .page-kicker in the JSX) sits top-right, level with the coin on the left */
+/* Date stays in the same utility row as settings, with the greeting below it. */
 .dashboard-page .page-kicker {
-  position: absolute;
-  z-index: 15;
-  top: 16px;
-  right: 16px;
-  height: 44px;
+  min-height: 44px;
   margin: 0;
   padding: 0;
   display: flex;
@@ -82,6 +81,71 @@
   gap: 8px;
   color: var(--muted);
   font-size: 11px;
+}
+
+.dashboard-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  margin: 0 0 22px;
+}
+
+.dashboard-stat-card {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr);
+  align-items: center;
+  column-gap: 10px;
+  row-gap: 3px;
+  padding: 16px;
+  border: 1px solid var(--glass-border);
+  border-radius: 17px;
+  background: var(--glass-fill);
+  box-shadow: var(--glass-shadow);
+  backdrop-filter: blur(20px) saturate(160%);
+  -webkit-backdrop-filter: blur(20px) saturate(160%);
+}
+
+.dashboard-stat-icon {
+  grid-row: span 2;
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border-radius: 11px;
+}
+
+.dashboard-stat-icon.income { color: var(--income); background: var(--income-soft); }
+.dashboard-stat-icon.expense { color: var(--danger); background: var(--danger-soft); }
+.dashboard-stat-icon.net { color: var(--spark-b); background: color-mix(in srgb, var(--spark-a) 16%, transparent); }
+
+.dashboard-stat-label {
+  color: var(--muted);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: .1em;
+}
+
+.dashboard-stat-card strong {
+  grid-column: 2;
+  overflow: hidden;
+  color: var(--ink);
+  font-size: clamp(16px, 2vw, 21px);
+  font-weight: 650;
+  font-variant-numeric: tabular-nums;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dashboard-stat-card strong.negative { color: var(--danger); }
+
+.dashboard-stat-card small {
+  grid-column: 2;
+  overflow: hidden;
+  color: var(--muted);
+  font-size: 10px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .dashboard-page .kicker-dot {
@@ -612,6 +676,38 @@
 }
 
 @media (max-width: 600px) {
+  .dashboard-stats {
+    gap: 8px;
+  }
+
+  .dashboard-stat-card {
+    grid-template-columns: 1fr;
+    justify-items: start;
+    gap: 7px;
+    padding: 12px 10px;
+  }
+
+  .dashboard-stat-icon {
+    grid-row: auto;
+    width: 29px;
+    height: 29px;
+    border-radius: 9px;
+  }
+
+  .dashboard-stat-card strong,
+  .dashboard-stat-card small {
+    grid-column: 1;
+  }
+
+  .dashboard-stat-card strong {
+    max-width: 100%;
+    font-size: clamp(13px, 4vw, 17px);
+  }
+
+  .dashboard-stat-card small {
+    font-size: 9px;
+  }
+
   .start-card {
     padding: 20px 18px 20px 20px;
     gap: 12px;
@@ -640,11 +736,10 @@
     align-items: center;
   }
 
-  /* phones: keep the date level with the smaller coin on the right */
+  /* Keep the date and settings button in one row on phones. */
   .dashboard-page .page-kicker {
-    top: 12px;
-    right: 13px;
     height: 38px;
+    min-height: 38px;
     font-size: 10px;
   }
 
