@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { ArrowUpRight, Check, Clock, Crown, Inbox, LogOut, Mail, UserPlus, Users } from 'lucide-react'
+import { ArrowUpRight, Check, Clock, Crown, Inbox, LogOut, Mail, UserPlus, UserRoundX, Users } from 'lucide-react'
 import { api, post } from '../lib/api'
 import { useAuth } from '../context/authContext'
 import './Household.css'
@@ -93,6 +93,15 @@ export default function Household() {
     await run(
       () => api(`/households/${household.id}/members/me`, { method: 'DELETE' }),
       `You left “${household.name}”.`,
+    )
+  }
+
+  async function removeMember(household, member) {
+    const username = member.users?.username || 'this member'
+    if (!window.confirm(`Remove ${username} from “${household.name}”?`)) return
+    await run(
+      () => api(`/households/${household.id}/members/${encodeURIComponent(member.user_id)}`, { method: 'DELETE' }),
+      `${username} was removed from “${household.name}”.`,
     )
   }
 
@@ -197,6 +206,7 @@ export default function Household() {
                 <span className="household-member-avatar">{(member.users?.username || '?').slice(0, 1).toUpperCase()}</span>
                 <span className="household-member-name">{member.users?.username || 'Member'}</span>
                 {member.role === 'owner' && <span className="household-role is-owner is-small"><Crown size={11} />Owner</span>}
+                {isOwner && member.role !== 'owner' && <button type="button" className="household-remove-button" disabled={busy} onClick={() => removeMember(household, member)}><UserRoundX size={13} /> Remove</button>}
               </div>)}
             </div>
           </section>

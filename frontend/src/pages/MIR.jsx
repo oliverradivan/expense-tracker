@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { ArrowDownLeft, ArrowUpRight, ChartNoAxesColumnIncreasing } from 'lucide-react'
+import { ArrowDownRight, ArrowUpRight, ChartNoAxesColumnIncreasing } from 'lucide-react'
 import { api } from '../lib/api'
 import { money, monthLabel } from '../lib/utils'
 import { getCachedTransactions, setCachedTransactions } from '../lib/transactionCache'
@@ -77,8 +77,8 @@ export default function MIR() {
     {isLoading ? <div className="quiet-state">Putting the numbers together…</div> : <>
       <div className="review-summary glass-panel"><span className="eyebrow">PROFIT / LOSS · {monthLabel(month).toUpperCase()}</span><strong className={income - expenses < 0 ? 'negative' : ''}>{money((income - expenses) / 100)}</strong><span>Income less expenses · {changeLabel(income - expenses, priorIncome - priorExpenses)}</span></div>
       <div className="review-cards">
-        <article className="review-card glass-panel"><span className="metric-icon income-icon"><ArrowDownLeft size={18}/></span><span className="eyebrow">TOTAL INCOME</span><strong>{money(income / 100)}</strong><span>{current.filter(row => row.type === 'income').length} entries · {changeLabel(income, priorIncome)}</span></article>
-        <article className="review-card glass-panel"><span className="metric-icon expense-icon"><ArrowUpRight size={18}/></span><span className="eyebrow">TOTAL EXPENSES</span><strong>{money(expenses / 100)}</strong><span>{current.filter(row => row.type === 'expense').length} entries · {changeLabel(expenses, priorExpenses)}</span></article>
+        <article className="review-card glass-panel"><span className="metric-icon income-icon"><ArrowUpRight size={18}/></span><span className="eyebrow">TOTAL INCOME</span><strong>{money(income / 100)}</strong><span>{current.filter(row => row.type === 'income').length} entries · {changeLabel(income, priorIncome)}</span></article>
+        <article className="review-card glass-panel"><span className="metric-icon expense-icon"><ArrowDownRight size={18}/></span><span className="eyebrow">TOTAL EXPENSES</span><strong>{money(expenses / 100)}</strong><span>{current.filter(row => row.type === 'expense').length} entries · {changeLabel(expenses, priorExpenses)}</span></article>
       </div>
       <div className="analytics-grid">
         <section className="analytics-card glass-panel"><div className="analytics-title"><div><span className="eyebrow">SIDE BY SIDE</span><h2>Income & expenses</h2></div><ChartNoAxesColumnIncreasing size={19}/></div><div className="bar-chart"><div className="bar-column"><strong>{money(income / 100)}</strong><div className="bar-track"><span className="bar-fill income-fill" style={{ height: `${Math.max(income / max * 100, income ? 5 : 0)}%` }}/></div><span>Income</span></div><div className="bar-column"><strong>{money(expenses / 100)}</strong><div className="bar-track"><span className="bar-fill expense-fill" style={{ height: `${Math.max(expenses / max * 100, expenses ? 5 : 0)}%` }}/></div><span>Expenses</span></div></div></section>

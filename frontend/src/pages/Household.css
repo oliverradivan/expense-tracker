@@ -97,7 +97,7 @@
   place-items: center;
   border-radius: 14px;
   background: var(--accent);
-  color: #fff;
+  color: var(--bg);
   font-size: 20px;
   font-weight: 800;
 }
@@ -207,7 +207,7 @@
 
 .household-count.is-attention {
   background: var(--accent);
-  color: #fff;
+  color: var(--bg);
 }
 
 /* ---------- Attention State ---------- */
@@ -222,7 +222,7 @@
 
 .household-section.is-attention .household-section-icon {
   background: var(--accent);
-  color: #fff;
+  color: var(--bg);
 }
 
 /* ---------- Quiet State ---------- */
@@ -288,7 +288,7 @@
   border: 1px solid transparent;
   border-radius: 10px;
   background: var(--accent);
-  color: #fff;
+  color: var(--bg);
   font-size: 12px;
   font-weight: 700;
   cursor: pointer;
@@ -386,6 +386,39 @@
   color: #fff;
 }
 
+/* Keep household cards solid and softly light in dark mode for clear contrast. */
+html[data-theme="dark"] .household-page .household-section,
+html[data-theme="dark"] .household-page .household-hero {
+  --bg: #f3f5f2;
+  --surface: #fff;
+  --ink: #202522;
+  --muted: #5f6862;
+  --line: #d9dfda;
+  --accent: #303a34;
+  --accent-soft: #e5ebe6;
+  --danger: #b42332;
+  --danger-soft: #f9e7e9;
+  color: var(--ink);
+  border-color: var(--line);
+  background: #f3f5f2;
+  box-shadow: 0 8px 24px rgb(0 0 0 / 18%);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+html[data-theme="dark"] .household-page .household-section.is-attention {
+  border-color: color-mix(in srgb, var(--accent) 35%, var(--line));
+  background: #f3f5f2;
+}
+
+html[data-theme="dark"] .household-page .household-section.is-quiet {
+  background: #f3f5f2;
+}
+
+html[data-theme="dark"] .household-page .household-hero {
+  background: #f3f5f2;
+}
+
 .household-pending-row {
   padding: 8px 10px;
   background: transparent;
@@ -445,6 +478,34 @@
   color: var(--ink);
   font-weight: 650;
   text-overflow: ellipsis;
+}
+
+.household-remove-button {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  min-height: 30px;
+  margin-left: auto;
+  padding: 0 9px;
+  border: 1px solid color-mix(in srgb, var(--danger) 32%, transparent);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--danger);
+  font-size: 11px;
+  font-weight: 650;
+  transition: background 160ms ease, color 160ms ease, opacity 160ms ease;
+}
+
+.household-remove-button:hover:not(:disabled) {
+  background: var(--danger);
+  color: var(--bg);
+}
+
+.household-remove-button:disabled {
+  cursor: wait;
+  opacity: .55;
 }
 
 /* ---------- Leave Footer ---------- */

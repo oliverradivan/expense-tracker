@@ -135,3 +135,19 @@ def leave(hid: str, user=Depends(current_user)):
         else: raise HTTPException(400, "Add another member before leaving as the only owner")
     d.table("household_members").delete().eq("household_id", hid).eq("user_id", user["id"]).execute()
     return {"ok": True}
+
+@router.delete("/{hid}/members/{member_id}")
+def remove_member(hid: str, member_id: str, user=Depends(current_user)):
+    d = db()
+    owner = d.table("household_members").select("id").eq("household_id", hid).eq("user_id", user["id"]).eq("role", "owner").limit(1).execute().data
+    if not owner:
+        raise HTTPException(403, "Only the household owner can remove members")
+    if member_id == user["id"]:
+        raise HTTPException(400, "Use the leave household action to remove yourself")
+    target = d.table("household_members").select("role").eq("household_id", hid).eq("user_id", member_id).limit(1).execute().data
+    if not target:
+        raise HTTPException(404, "Household member not found")
+    if target[0]["role"] == "owner":
+        raise HTTPException(400, "The household owner cannot be removed")
+    d.table("household_members").delete().eq("household_id", hid).eq("user_id", member_id).execute()
+    return {"ok": True}
