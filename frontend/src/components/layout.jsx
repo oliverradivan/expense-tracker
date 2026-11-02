@@ -6,7 +6,6 @@ import Login from '../pages/login'
 import './Layout.css'
 
 const SLIDE_MS = 300
-const SETTINGS_EXIT_MS = 560
 
 export default function Layout() {
   const { signOut } = useAuth()
@@ -48,20 +47,18 @@ export default function Layout() {
     const fromSettingsToDashboard = previous.path === '/settings' && location.pathname === '/'
     if (fromDashboardToSettings || fromSettingsToDashboard) {
       const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-      const transitionDuration = reducedMotion
-        ? 1
-        : fromSettingsToDashboard ? SETTINGS_EXIT_MS : SLIDE_MS
-      window.clearTimeout(timer.current)
+      const transitionDuration = reducedMotion ? 1 : SLIDE_MS
       setPageTransition({
         direction: fromDashboardToSettings ? 'settings-enter' : 'settings-exit',
         from: previous.element,
         to: outletRef.current,
       })
       activePage.current = { path: location.pathname, element: outletRef.current }
-      timer.current = window.setTimeout(() => {
+      const transitionTimer = window.setTimeout(() => {
         setPageTransition(null)
       }, transitionDuration)
-      return () => window.clearTimeout(timer.current)
+      timer.current = transitionTimer
+      return () => window.clearTimeout(transitionTimer)
     }
 
     activePage.current = { path: location.pathname, element: outletRef.current }
@@ -95,13 +92,13 @@ export default function Layout() {
       const touch = event.touches[0]
       touchStart.current = { x: touch.clientX, y: touch.clientY }
     }} onTouchEnd={handleTouchEnd}>
-      {!logoutPage && !pageTransition && outlet}
+      {!logoutPage && <div className="route-base">
+        {!pageTransition ? outlet : pageTransition.direction === 'settings-enter' ? pageTransition.from : pageTransition.to}
+      </div>}
       {!logoutPage && pageTransition?.direction === 'settings-enter' && <>
-        <div className="route-base">{pageTransition.from}</div>
         <div className="settings-slide-layer settings-slide-in"><div className="main-content settings-slide-content">{pageTransition.to}</div></div>
       </>}
       {!logoutPage && pageTransition?.direction === 'settings-exit' && <>
-        <div className="route-base">{pageTransition.to}</div>
         <div className="settings-slide-layer settings-slide-out-left"><div className="main-content settings-slide-content">{pageTransition.from}</div></div>
       </>}
     </main>

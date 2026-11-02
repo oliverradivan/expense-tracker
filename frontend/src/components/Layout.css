@@ -64,7 +64,7 @@ html[data-theme="dark"] .logout-login-base {
 }
 
 .settings-slide-out-left {
-  animation: settings-exit-to-left 560ms cubic-bezier(.22,.78,.22,1) both;
+  animation: settings-exit-to-left 300ms cubic-bezier(.22,.78,.22,1) both;
 }
 
 .settings-logout-transition {
