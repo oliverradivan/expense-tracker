@@ -9,7 +9,7 @@ import { getCachedTransactions, setCachedTransactions } from '../lib/transaction
 import { money } from '../lib/utils'
 import './dashboard.css'
 
-const today = new Intl.DateTimeFormat(undefined, { weekday: 'long', month: 'long', day: 'numeric' }).format(new Date())
+const dateFormatter = new Intl.DateTimeFormat(undefined, { weekday: 'long', month: 'long', day: 'numeric' })
 
 export default function Dashboard() {
   const { user, space } = useAuth()
@@ -22,9 +22,28 @@ export default function Dashboard() {
   const [transactions, setTransactions] = useState(() => getCachedTransactions(user.id, space.id) || [])
   const [statsKey, setStatsKey] = useState(() => getCachedTransactions(user.id, space.id) ? `${user.id}:${space.id}` : '')
   const [statsError, setStatsError] = useState('')
+  const [dueReminders, setDueReminders] = useState(0)
+  const [remindersError, setRemindersError] = useState('')
   const [retryCount, setRetryCount] = useState(0)
+  const [today, setToday] = useState(() => dateFormatter.format(new Date()))
   const currentStatsKey = `${user.id}:${space.id}`
   const statsReady = statsKey === currentStatsKey
+
+  useEffect(() => {
+    let timer
+    const scheduleMidnightRefresh = () => {
+      const now = new Date()
+      const midnight = new Date(now)
+      midnight.setHours(24, 0, 0, 0)
+      timer = window.setTimeout(() => {
+        setToday(dateFormatter.format(new Date()))
+        scheduleMidnightRefresh()
+      }, midnight.getTime() - now.getTime() + 50)
+    }
+
+    scheduleMidnightRefresh()
+    return () => window.clearTimeout(timer)
+  }, [])
 
   useEffect(() => {
     let alive = true
@@ -48,6 +67,21 @@ export default function Dashboard() {
       })
     return () => { alive = false }
   }, [currentStatsKey, retryCount, space.id, user.id])
+
+  useEffect(() => {
+    let alive = true
+    const query = space.id === 'private' ? '' : `?household_id=${encodeURIComponent(space.id)}`
+    api(`/planning/reminders${query}`)
+      .then((reminders) => {
+        if (!alive) return
+        const now = new Date()
+        const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`
+        setDueReminders((reminders || []).filter(reminder => reminder.next_due <= today).length)
+        setRemindersError('')
+      })
+      .catch(error => { if (alive) setRemindersError(error.message) })
+    return () => { alive = false }
+  }, [space.id])
 
   const now = new Date()
   const currentMonth = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`
@@ -123,6 +157,8 @@ export default function Dashboard() {
         Couldn’t refresh your totals: {statsError}{' '}
         <button type="button" onClick={() => setRetryCount((count) => count + 1)}>Retry</button>
       </p>}
+      {remindersError && <p className="notice error-notice" role="alert">Couldn’t load recurring reminders: {remindersError}</p>}
+      {dueReminders > 0 && <p className="dashboard-reminder-notice"><span>{dueReminders} recurring {dueReminders === 1 ? 'transaction is' : 'transactions are'} due.</span><Link to="/planning">Review reminders →</Link></p>}
 
       {/* Start card: the coin rolls away, then opens the log page */}
       <section className="start-card glass-panel" ref={cardRef}>

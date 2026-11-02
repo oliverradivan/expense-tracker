@@ -5,12 +5,12 @@ from slowapi.errors import RateLimitExceeded
 from slowapi.util import get_remote_address
 try:  # Local repository imports; the Vercel service root is already backend/.
     from backend.config import ALLOWED_ORIGINS
-    from backend.routers import auth, transactions, households
+    from backend.routers import auth, transactions, households, planning
 except ModuleNotFoundError as exc:
     if exc.name != "backend":
         raise
     from config import ALLOWED_ORIGINS
-    from routers import auth, transactions, households
+    from routers import auth, transactions, households, planning
 
 app = FastAPI(title="Expense Tracker API")
 app.state.limiter = Limiter(key_func=get_remote_address)
@@ -19,6 +19,7 @@ app.add_middleware(CORSMiddleware, allow_origins=ALLOWED_ORIGINS, allow_credenti
 app.include_router(auth.router, prefix="/api/auth", tags=["auth"])
 app.include_router(transactions.router, prefix="/api/transactions", tags=["transactions"])
 app.include_router(households.router, prefix="/api/households", tags=["households"])
+app.include_router(planning.router, prefix="/api/planning", tags=["planning"])
 
 @app.get("/api/health")
 def health():

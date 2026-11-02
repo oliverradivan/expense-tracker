@@ -18,7 +18,7 @@ The frontend API URL defaults to `http://localhost:8000`. Backend CORS permits t
 
 ## Database setup
 
-Apply migrations in order in the Supabase SQL editor (or through the project's migration process): `001_init.sql` through `005_household_integrity.sql`. Migration 002 adds shared households, invitations, and the exclusive private-or-household transaction owner constraint. It keeps existing private transaction rows and does not reset data. It also installs the account-deletion procedure: private transactions are removed; household transactions and households are retained; when a household owner leaves or deletes their account, the oldest remaining member becomes owner. If an owner deletes their account and no other member remains, the household is retained without a member. Migration 003 adds scoped custom categories and transaction frequency; migration 004 adds join requests. Migration 005 atomically creates households and renames categories, and enforces one household membership per user. If it reports existing duplicate memberships, resolve those records before retrying it.
+Apply migrations in order in the Supabase SQL editor (or through the project's migration process): `001_init.sql` through `006_planning_features.sql`. Migration 002 adds shared households, invitations, and the exclusive private-or-household transaction owner constraint. It keeps existing private transaction rows and does not reset data. It also installs the account-deletion procedure: private transactions are removed; household transactions and households are retained; when a household owner leaves or deletes their account, the oldest remaining member becomes owner. If an owner deletes their account and no other member remains, the household is retained without a member. Migration 003 adds scoped custom categories and transaction frequency; migration 004 adds join requests. Migration 005 atomically creates households and renames categories, and enforces one household membership per user. Migration 006 adds personal/household budgets, savings goals, and recurring reminders. Recurring transactions are only recorded after manual confirmation.
 
 All migrations enable RLS and deny direct `anon`/`authenticated` table access. The API uses the backend service key and checks the signed user and current household membership before every household read, write, or delete. Run the migrations before registering users or using household features. Transaction history is fetched in ordered pages to avoid Supabase's per-request row cap.
 
@@ -29,6 +29,7 @@ All migrations enable RLS and deny direct `anon`/`authenticated` table access. T
 - Space selection is revalidated against the current memberships at sign-in and refresh. Transaction lists and reports query only the selected space.
 - Categories start with Subscription, Apartment, Grocery, Other for expenses and Job, Maanak, Gift, Other for income. Validation is enforced in both the UI and API.
 - Currency is Israeli shekels. Theme preference is stored locally in the browser. Transaction frequency is descriptive; it does not automatically create future transactions.
+- The Plan page manages budgets, savings goals, and due recurring reminders. History search and filters apply to CSV exports.
 
 ## Checks
 

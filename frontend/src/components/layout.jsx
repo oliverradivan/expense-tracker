@@ -30,7 +30,7 @@ export default function Layout() {
   const outletContext = useMemo(() => ({ onLogout: beginLogout }), [beginLogout])
   const outlet = useOutlet(outletContext)
   const outletRef = useRef(outlet)
-  const pages = ['/', '/history', '/log', '/review', '/household']
+  const pages = ['/', '/history', '/log', '/review', '/planning', '/household']
 
   useLayoutEffect(() => {
     outletRef.current = outlet

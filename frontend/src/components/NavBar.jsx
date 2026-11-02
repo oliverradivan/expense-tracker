@@ -1,5 +1,5 @@
 import { NavLink, useLocation } from 'react-router-dom'
-import { House, LayoutGrid, List, Plus, ChartNoAxesColumn } from 'lucide-react'
+import { House, LayoutGrid, List, Plus, ChartNoAxesColumn, Target } from 'lucide-react'
 import './NavBar.css'
 
 const links = [
@@ -7,6 +7,7 @@ const links = [
   { to: '/history', label: 'History', icon: List },
   { to: '/log', label: 'Log Expense', icon: Plus, center: true },
   { to: '/review', label: 'Review', icon: ChartNoAxesColumn },
+  { to: '/planning', label: 'Plan', icon: Target },
   { to: '/household', label: 'Household', icon: House },
 ]
 

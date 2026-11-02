@@ -3,6 +3,7 @@ import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { useAuth } from './context/authContext'
 import Layout from './components/layout'
 import CoinIcon from './components/CoinIcon'
+import Skeleton from './components/Skeleton'
 import Login from './pages/login'
 import Register from './pages/register'
 import Dashboard from './pages/dashboard'
@@ -11,6 +12,7 @@ import LogExpense from './pages/logexpense'
 import MIR from './pages/MIR'
 import Settings from './pages/settings'
 import Household from './pages/Household'
+import Planning from './pages/Planning'
 import NotFoundPage from './pages/404'
 import LGDefs from './components/LGDefs'
 import './App.css'
@@ -87,19 +89,44 @@ export default function App() {
           <Route path="/review" element={<MIR />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/household" element={<Household />} />
+          <Route path="/planning" element={<Planning />} />
         </Route>
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </>}
     {(!ready || !splashGone) && (
-      <div className="startup" ref={splashRef}>
+      <div className="startup" ref={splashRef} role="status" aria-label="Loading dashboard">
         <div className="startup-backdrop" />
+        <div className="startup-skeleton startup-fade" aria-hidden="true">
+          <div className="startup-skeleton-top">
+            <Skeleton style={{ width: 44, height: 44, borderRadius: 16 }} />
+            <Skeleton style={{ width: 126, height: 10 }} />
+          </div>
+          <div className="startup-skeleton-heading">
+            <Skeleton style={{ width: 'min(60%, 420px)', height: 46 }} />
+            <Skeleton style={{ width: 196, height: 12 }} />
+          </div>
+          <div className="startup-skeleton-stats">
+            {[0, 1, 2].map((item) => (
+              <div className="startup-skeleton-stat" key={item}>
+                <Skeleton style={{ width: 32, height: 32, borderRadius: 10 }} />
+                <Skeleton style={{ width: '62%', height: 10 }} />
+                <Skeleton style={{ width: '82%', height: 18 }} />
+              </div>
+            ))}
+          </div>
+          <div className="startup-skeleton-card">
+            <div>
+              <Skeleton style={{ width: 220, maxWidth: '100%', height: 18 }} />
+              <Skeleton style={{ width: 156, height: 10, marginTop: 10 }} />
+            </div>
+            <Skeleton style={{ width: 88, height: 88, borderRadius: '50%' }} />
+          </div>
+        </div>
         <div className="startup-mark" ref={markRef}>
           <CoinIcon size={53} />
-          <i className="startup-fade" />
         </div>
-        <p className="startup-fade">Making room for a clearer picture</p>
-        <span className="startup-loader startup-fade" />
+        <span className="sr-only">Loading dashboard…</span>
       </div>
     )}
   </>

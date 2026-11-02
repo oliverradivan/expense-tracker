@@ -1,0 +1,39 @@
+.planning-page .page-heading-row { align-items: center; }
+.planning-page .page-heading-row h1 { font-size: clamp(36px, 5vw, 52px); }
+.planning-section { margin: 0 0 16px; padding: 22px; border: 1px solid var(--glass-border); border-radius: 17px; background: var(--glass-fill); box-shadow: var(--glass-shadow); backdrop-filter: blur(20px) saturate(160%); }
+.planning-section-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; color: var(--muted); margin-bottom: 16px; }
+.planning-section-heading h2 { margin: 5px 0 0; color: var(--ink); font-size: 19px; letter-spacing: -.03em; }
+.planning-month input,.planning-form input,.planning-form select,.contribution-form input { min-width: 0; height: 40px; padding: 0 10px; border: 1px solid var(--line); border-radius: 9px; background: var(--surface); color: var(--ink); font-size: 12px; }
+.planning-form { display: grid; grid-template-columns: repeat(auto-fit,minmax(150px,1fr)); gap: 12px; align-items: end; }
+.planning-form .field { gap: 6px; }
+.planning-form .primary-button { min-height: 40px; padding: 0 13px; font-size: 11px; }
+.planning-list { display: grid; gap: 14px; margin-top: 20px; }
+.planning-item-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
+.planning-item-top>div,.reminder-description { display: grid; gap: 5px; min-width: 0; }
+.planning-item-top strong,.reminder-description strong { font-size: 12px; }
+.planning-item-top span,.reminder-description span { color: var(--muted); font-size: 10px; }
+.planning-delete { flex: none; display: grid; place-items: center; width: 30px; height: 30px; border: 0; border-radius: 8px; background: transparent; color: var(--muted); }
+.planning-delete:hover { background: var(--danger-soft); color: var(--danger); }
+.planning-progress { height: 6px; margin-top: 9px; overflow: hidden; border-radius: 9px; background: var(--accent-soft); }
+.planning-progress i { display: block; height: 100%; border-radius: inherit; background: var(--income); transition: width .25s ease; }
+.planning-progress i.over-budget { background: var(--danger); }
+.over-budget-note { display: block; margin-top: 6px; color: var(--danger); font-size: 10px; }
+.planning-empty,.planning-help { margin: 14px 0 0; color: var(--muted); font-size: 11px; line-height: 1.5; }
+.planning-help { margin: -7px 0 15px; }
+.contribution-form { display: flex; gap: 7px; margin-top: 10px; }
+.contribution-form input { width: 160px; }
+.contribution-form .secondary-button { min-height: 36px; }
+.reminder-item { display: flex; align-items: center; gap: 10px; padding-top: 12px; border-top: 1px solid var(--line); }
+.reminder-icon { width: 33px; height: 33px; flex: none; display: grid; place-items: center; border-radius: 10px; color: var(--danger); background: var(--danger-soft); }
+.reminder-icon.income { color: var(--income); background: var(--income-soft); }
+.reminder-description { flex: 1; }
+.reminder-description small { color: var(--ink); font-size: 10px; }
+.reminder-item .secondary-button { min-height: 34px; padding: 0 10px; font-size: 10px; }
+@media(max-width:600px) {
+  .planning-section { padding: 17px; }
+  .planning-section-heading h2 { font-size: 17px; }
+  .planning-form { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .planning-form .primary-button { grid-column: 1/-1; }
+  .reminder-item { flex-wrap: wrap; }
+  .reminder-description { flex-basis: calc(100% - 55px); }
+}

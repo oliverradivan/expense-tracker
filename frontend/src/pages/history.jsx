@@ -9,6 +9,7 @@ import { getCachedTransactions, setCachedTransactions } from '../lib/transaction
 import { money } from '../lib/utils'
 import { useAuth } from '../context/authContext'
 import './history.css'
+import './HistoryFilters.css'
 
 const CATEGORY_ICONS = {
   Subscription: TvMinimalPlay,
@@ -53,6 +54,11 @@ export default function History() {
   const [error, setError] = useState('')
   const [loadedSpace, setLoadedSpace] = useState(() => getCachedTransactions(...cacheKey) ? `${user.id}:${space.id}` : '')
   const [deleting, setDeleting] = useState(null)
+  const [search, setSearch] = useState('')
+  const [typeFilter, setTypeFilter] = useState('')
+  const [categoryFilter, setCategoryFilter] = useState('')
+  const [fromDate, setFromDate] = useState('')
+  const [toDate, setToDate] = useState('')
 
   useEffect(() => {
     let alive = true
@@ -109,17 +115,51 @@ export default function History() {
   const displayLoaded = loadedSpace === currentKey
   const displayItems = displayLoaded ? items : cachedForSpace || []
   const viewState = displayLoaded ? state : cachedForSpace ? 'ready' : 'loading'
-  const groups = displayItems.reduce((all, item) => {
+  const categories = [...new Set(displayItems.map(item => item.category))].sort()
+  const filteredItems = displayItems.filter(item => {
+    const matchesSearch = `${item.label} ${item.category} ${item.amount}`.toLowerCase().includes(search.trim().toLowerCase())
+    return matchesSearch && (!typeFilter || item.type === typeFilter)
+      && (!categoryFilter || item.category === categoryFilter)
+      && (!fromDate || dateKey(item.date) >= fromDate)
+      && (!toDate || dateKey(item.date) <= toDate)
+  })
+  const groups = filteredItems.reduce((all, item) => {
     const month = dateKey(item.date).slice(0, 7)
     ;(all[month] ||= []).push(item)
     return all
   }, {})
 
+  function exportCsv() {
+    const escape = (value) => {
+      let text = String(value ?? '')
+      if (/^[=+\-@\t\r]/.test(text)) text = `'${text}`
+      return `"${text.replaceAll('"', '""')}"`
+    }
+    const rows = [
+      ['Date', 'Type', 'Category', 'Description', 'Amount', 'Frequency'],
+      ...filteredItems.map(item => [item.date, item.type, item.category, item.label, item.amount, item.frequency || 'one_time']),
+    ]
+    const blob = new Blob([`\uFEFF${rows.map(row => row.map(escape).join(',')).join('\r\n')}`], { type: 'text/csv;charset=utf-8' })
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.href = url
+    link.download = `transactions-${space.id === 'private' ? 'personal' : 'household'}-${new Date().toISOString().slice(0, 10)}.csv`
+    link.click()
+    URL.revokeObjectURL(url)
+  }
+
   return <section className="page history-page">
     <div className="page-heading-row history-header">
       <div><h1>History</h1><p className="page-intro">A clear record of {space.name.toLowerCase()}.</p></div>
-      <span className="count-pill">{viewState === 'ready' ? `${displayItems.length} ${displayItems.length === 1 ? 'entry' : 'entries'}` : 'Loading'}</span>
+      <div className="history-tools"><span className="count-pill">{viewState === 'ready' ? `${filteredItems.length} ${filteredItems.length === 1 ? 'entry' : 'entries'}` : 'Loading'}</span><button type="button" className="secondary-button" disabled={!filteredItems.length} onClick={exportCsv}>Export CSV</button></div>
     </div>
+    {viewState === 'ready' && <div className="history-filters glass-panel">
+      <label className="history-search"><span className="sr-only">Search transactions</span><input type="search" value={search} onChange={event => setSearch(event.target.value)} placeholder="Search description or amount" /></label>
+      <label><span className="sr-only">Filter by type</span><select value={typeFilter} onChange={event => setTypeFilter(event.target.value)}><option value="">All types</option><option value="expense">Expenses</option><option value="income">Income</option></select></label>
+      <label><span className="sr-only">Filter by category</span><select value={categoryFilter} onChange={event => setCategoryFilter(event.target.value)}><option value="">All categories</option>{categories.map(category => <option key={category}>{category}</option>)}</select></label>
+      <label><span className="sr-only">From date</span><input type="date" value={fromDate} onChange={event => setFromDate(event.target.value)} /></label>
+      <label><span className="sr-only">To date</span><input type="date" value={toDate} onChange={event => setToDate(event.target.value)} /></label>
+    </div>}
 
     {viewState === 'loading' && <div className="history-skeleton" role="status" aria-label="Loading transactions">
       <span className="sr-only">Loading transactions…</span>
@@ -134,6 +174,7 @@ export default function History() {
     </div>}
     {displayLoaded && error && <div className="notice error-notice" role="alert">{error}</div>}
     {viewState === 'ready' && !displayItems.length && <div className="empty-state"><span className="empty-icon"><Shapes size={22}/></span><h2>Nothing here yet</h2><p>Your transactions will appear here once you add them.</p></div>}
+    {viewState === 'ready' && displayItems.length > 0 && !filteredItems.length && <p className="quiet-state">No transactions match these filters.</p>}
 
     {viewState === 'ready' && Object.entries(groups).sort(([a], [b]) => b.localeCompare(a)).map(([month, rows]) => {
       const orderedRows = [...rows].sort((a, b) => dateKey(b.date).localeCompare(dateKey(a.date)) || String(b.id).localeCompare(String(a.id)))

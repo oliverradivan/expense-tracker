@@ -166,6 +166,25 @@
   margin: 0 0 14px;
 }
 
+.dashboard-reminder-notice {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 14px;
+  padding: 12px 14px;
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
+  background: var(--glass-fill);
+  color: var(--ink);
+  font-size: 12px;
+}
+
+.dashboard-reminder-notice a {
+  font-weight: 650;
+  white-space: nowrap;
+}
+
 /* ---- start card: the coin rolls away, then opens the log page ---- */
 .start-card {
   position: relative;
