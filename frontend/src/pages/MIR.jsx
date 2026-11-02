@@ -4,9 +4,11 @@ import { api } from '../lib/api'
 import { money, monthLabel } from '../lib/utils'
 import { getCachedTransactions, setCachedTransactions } from '../lib/transactionCache'
 import { useAuth } from '../context/authContext'
+import Skeleton from '../components/Skeleton'
 import './MIR.css'
 
 const monthBefore = (value) => {
+  if (!/^\d{4}-\d{2}$/.test(value)) return ''
   const [year, month] = value.split('-').map(Number)
   return new Date(Date.UTC(year, month - 2, 1)).toISOString().slice(0, 7)
 }
@@ -72,9 +74,18 @@ export default function MIR() {
 
   return <section className="page mir-page">
     <div className="page-heading-row"><div><h1>Month in review</h1>
-    <p className="page-intro">A monthly snapshot of {space.name.toLowerCase()}.</p></div><label className="month-picker"><span className="sr-only">Choose month</span><input type="month" value={month} onChange={event => setMonth(event.target.value)}/></label></div>
+    <p className="page-intro">A monthly snapshot of {space.name.toLowerCase()}.</p></div><label className="month-picker"><span className="sr-only">Choose month</span><input type="month" required value={month} onChange={event => { if (event.target.value) setMonth(event.target.value) }}/></label></div>
     {loadedKey === requestKey && error && <p className="notice error-notice">{error}</p>}
-    {isLoading ? <div className="quiet-state">Putting the numbers together…</div> : <>
+    {isLoading ? <div className="mir-skeleton" role="status" aria-label="Loading monthly review">
+      <span className="sr-only">Loading monthly review…</span>
+      <div className="review-summary glass-panel"><Skeleton style={{ width: 150, height: 12 }} /><Skeleton style={{ width: 210, height: 38 }} /><Skeleton style={{ width: '58%', height: 12 }} /></div>
+      <div className="review-cards">
+        {[0, 1].map((item) => <div className="review-card glass-panel" key={item}><Skeleton style={{ width: 100, height: 12 }} /><Skeleton style={{ width: 130, height: 24 }} /><Skeleton style={{ width: '72%', height: 10 }} /></div>)}
+      </div>
+      <div className="analytics-grid">
+        {[0, 1].map((item) => <div className="analytics-card glass-panel" key={item}><Skeleton style={{ width: 135, height: 16 }} /><Skeleton style={{ width: '100%', height: 145, marginTop: 22 }} /></div>)}
+      </div>
+    </div> : <>
       <div className="review-summary glass-panel"><span className="eyebrow">PROFIT / LOSS · {monthLabel(month).toUpperCase()}</span><strong className={income - expenses < 0 ? 'negative' : ''}>{money((income - expenses) / 100)}</strong><span>Income less expenses · {changeLabel(income - expenses, priorIncome - priorExpenses)}</span></div>
       <div className="review-cards">
         <article className="review-card glass-panel"><span className="metric-icon income-icon"><ArrowUpRight size={18}/></span><span className="eyebrow">TOTAL INCOME</span><strong>{money(income / 100)}</strong><span>{current.filter(row => row.type === 'income').length} entries · {changeLabel(income, priorIncome)}</span></article>

@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { ArrowDownRight, ArrowUpRight, Wallet } from 'lucide-react'
 import { useAuth } from '../context/authContext'
 import CoinIcon from '../components/CoinIcon'
+import Skeleton from '../components/Skeleton'
 import { api } from '../lib/api'
 import { getCachedTransactions, setCachedTransactions } from '../lib/transactionCache'
 import { money } from '../lib/utils'
@@ -19,7 +20,9 @@ export default function Dashboard() {
   const hasLeft = useRef(false)
   const [rolling, setRolling] = useState(false)
   const [transactions, setTransactions] = useState(() => getCachedTransactions(user.id, space.id) || [])
-  const [statsKey, setStatsKey] = useState(() => `${user.id}:${space.id}`)
+  const [statsKey, setStatsKey] = useState(() => getCachedTransactions(user.id, space.id) ? `${user.id}:${space.id}` : '')
+  const [statsError, setStatsError] = useState('')
+  const [retryCount, setRetryCount] = useState(0)
   const currentStatsKey = `${user.id}:${space.id}`
   const statsReady = statsKey === currentStatsKey
 
@@ -32,10 +35,19 @@ export default function Dashboard() {
         setCachedTransactions(user.id, space.id, data)
         setTransactions(data)
         setStatsKey(currentStatsKey)
+        setStatsError('')
       })
-      .catch(() => { if (alive) { setTransactions(getCachedTransactions(user.id, space.id) || []); setStatsKey(currentStatsKey) } })
+      .catch((error) => {
+        if (!alive) return
+        const cached = getCachedTransactions(user.id, space.id)
+        if (cached) {
+          setTransactions(cached)
+          setStatsKey(currentStatsKey)
+        }
+        setStatsError(error.message)
+      })
     return () => { alive = false }
-  }, [space.id, user.id])
+  }, [currentStatsKey, retryCount, space.id, user.id])
 
   const now = new Date()
   const currentMonth = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`
@@ -87,26 +99,30 @@ export default function Dashboard() {
         </div>
       </div>
 
-      <section className="dashboard-stats" aria-label="This month at a glance">
+      <section className="dashboard-stats" aria-label="This month at a glance" aria-busy={!statsReady}>
         <div className="dashboard-stat-card">
           <span className="dashboard-stat-icon income"><ArrowUpRight size={17} aria-hidden="true" /></span>
           <span className="dashboard-stat-label">INCOME</span>
-          <strong>{statsReady ? money(income) : '—'}</strong>
+          {statsReady ? <strong>{money(income)}</strong> : <Skeleton className="dashboard-stat-skeleton" style={{ width: '76%', height: 22 }} />}
           <small>This month</small>
         </div>
         <div className="dashboard-stat-card">
           <span className="dashboard-stat-icon expense"><ArrowDownRight size={17} aria-hidden="true" /></span>
           <span className="dashboard-stat-label">SPENT</span>
-          <strong>{statsReady ? money(expenses) : '—'}</strong>
+          {statsReady ? <strong>{money(expenses)}</strong> : <Skeleton className="dashboard-stat-skeleton" style={{ width: '70%', height: 22 }} />}
           <small>This month</small>
         </div>
         <div className="dashboard-stat-card">
           <span className="dashboard-stat-icon net"><Wallet size={16} aria-hidden="true" /></span>
           <span className="dashboard-stat-label">NET</span>
-          <strong className={net < 0 ? 'negative' : ''}>{statsReady ? money(net) : '—'}</strong>
+          {statsReady ? <strong className={net < 0 ? 'negative' : ''}>{money(net)}</strong> : <Skeleton className="dashboard-stat-skeleton" style={{ width: '68%', height: 22 }} />}
           <small>Income minus spending</small>
         </div>
       </section>
+      {statsError && <p className="notice error-notice" role="alert">
+        Couldn’t refresh your totals: {statsError}{' '}
+        <button type="button" onClick={() => setRetryCount((count) => count + 1)}>Retry</button>
+      </p>}
 
       {/* Start card: the coin rolls away, then opens the log page */}
       <section className="start-card glass-panel" ref={cardRef}>

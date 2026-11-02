@@ -4,6 +4,7 @@ import {
   TvMinimalPlay, Wallet,
 } from 'lucide-react'
 import { api } from '../lib/api'
+import Skeleton from '../components/Skeleton'
 import { getCachedTransactions, setCachedTransactions } from '../lib/transactionCache'
 import { money } from '../lib/utils'
 import { useAuth } from '../context/authContext'
@@ -120,7 +121,17 @@ export default function History() {
       <span className="count-pill">{viewState === 'ready' ? `${displayItems.length} ${displayItems.length === 1 ? 'entry' : 'entries'}` : 'Loading'}</span>
     </div>
 
-    {viewState === 'loading' && <div className="quiet-state">Gathering your transactions…</div>}
+    {viewState === 'loading' && <div className="history-skeleton" role="status" aria-label="Loading transactions">
+      <span className="sr-only">Loading transactions…</span>
+      <div className="history-month-heading"><Skeleton style={{ width: 130, height: 18 }} /><Skeleton style={{ width: 78, height: 12 }} /></div>
+      <div className="history-entries glass-panel" aria-hidden="true">
+        {Array.from({ length: 5 }, (_, index) => <div className="history-entry" key={index}>
+          <Skeleton style={{ width: 34, height: 34, borderRadius: 10 }} />
+          <div className="history-skeleton-description"><Skeleton style={{ width: `${45 + (index % 3) * 13}%`, height: 13 }} /><Skeleton style={{ width: '55%', height: 10 }} /></div>
+          <Skeleton style={{ width: 66, height: 14 }} />
+        </div>)}
+      </div>
+    </div>}
     {displayLoaded && error && <div className="notice error-notice" role="alert">{error}</div>}
     {viewState === 'ready' && !displayItems.length && <div className="empty-state"><span className="empty-icon"><Shapes size={22}/></span><h2>Nothing here yet</h2><p>Your transactions will appear here once you add them.</p></div>}
 

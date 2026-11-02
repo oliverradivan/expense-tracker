@@ -28,7 +28,7 @@
 
 @media(max-width:600px){
   .nav-item{gap:0}
-  .nav-label{display:none}
+  .nav-label{font-size:8px;line-height:9px}
 }
 
 .nav-no-active .nav-slider{opacity:0}

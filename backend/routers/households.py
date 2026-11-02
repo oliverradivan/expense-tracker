@@ -34,9 +34,22 @@ def create(body: dict, user=Depends(current_user)):
     d = db()
     if d.table("household_members").select("id").eq("user_id", user["id"]).limit(1).execute().data:
         raise HTTPException(409, "Leave your current household before creating another")
-    h = d.table("households").insert({"name": name, "created_by": user["id"]}).execute().data[0]
-    d.table("household_members").insert({"household_id": h["id"], "user_id": user["id"], "role": "owner"}).execute()
-    return h
+    try:
+        return d.rpc("create_expense_household", {"p_user_id": user["id"], "p_name": name}).execute().data[0]
+    except Exception as exc:
+        if getattr(exc, "code", None) == "23505":
+            raise HTTPException(409, "Leave your current household before creating another") from exc
+        raise
+
+def add_member(d, household_id: str, user_id: str, role: str):
+    try:
+        d.table("household_members").insert(
+            {"household_id": household_id, "user_id": user_id, "role": role}
+        ).execute()
+    except Exception as exc:
+        if getattr(exc, "code", None) == "23505":
+            raise HTTPException(409, "This user already belongs to a household") from exc
+        raise
 
 @router.post("/join-requests")
 def request_to_join(body: dict, user=Depends(current_user)):
@@ -95,7 +108,7 @@ def respond_to_join_request(request_id: str, action: str, user=Depends(current_u
         in_another_household = d.table("household_members").select("id").eq("user_id", request["requester_id"]).limit(1).execute().data
         if in_another_household:
             raise HTTPException(409, "This person must leave their current household first")
-        d.table("household_members").insert({"household_id": request["household_id"], "user_id": request["requester_id"], "role": "member"}).execute()
+        add_member(d, request["household_id"], request["requester_id"], "member")
     d.table("household_join_requests").update({"status": "accepted" if action == "accept" else "declined", "responded_at": datetime.now(timezone.utc).isoformat()}).eq("id", request_id).eq("status", "pending").execute()
     return {"ok": True}
 
@@ -121,7 +134,7 @@ def respond(iid: str, action: str, user=Depends(current_user)):
     if action == "accept":
         if d.table("household_members").select("id").eq("user_id", user["id"]).limit(1).execute().data:
             raise HTTPException(409, "Leave your current household before accepting another invitation")
-        d.table("household_members").insert({"household_id": rows[0]["household_id"], "user_id": user["id"], "role": "member"}).execute()
+        add_member(d, rows[0]["household_id"], user["id"], "member")
     d.table("household_invitations").update({"status": "accepted" if action == "accept" else "declined", "responded_at": datetime.now(timezone.utc).isoformat()}).eq("id", iid).execute()
     return {"ok": True}
 

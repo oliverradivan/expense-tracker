@@ -26,7 +26,7 @@ export function AuthFrame(props) {
 }
 
 export default function Login() {
-  const { signIn } = useAuth()
+  const { signIn, authError } = useAuth()
   const nav = useNavigate()
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
@@ -92,9 +92,9 @@ export default function Login() {
           </span>
         </label>
 
-        {error && (
+        {(error || authError) && (
           <p role="alert" className="notice error-notice">
-            {error}
+            {error || authError}
           </p>
         )}
 

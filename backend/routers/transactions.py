@@ -80,10 +80,22 @@ def rename_category(category_id: str, body: dict, user=Depends(current_user)):
     duplicates = duplicates.eq("household_id", household_id) if household_id else duplicates.eq("user_id", user["id"]).is_("household_id", "null")
     if any(row["id"] != category_id and row["name"].casefold() == name.casefold() for row in duplicates.execute().data):
         raise HTTPException(409, "That category already exists in this financial space")
-    transactions = db.table("transactions").update({"category": name}).eq("category", current["name"]).eq("type", current["type"])
-    transactions = transactions.eq("household_id", household_id) if household_id else transactions.eq("user_id", user["id"]).is_("household_id", "null")
-    transactions.execute()
-    return db.table("transaction_categories").update({"name": name}).eq("id", category_id).execute().data[0]
+    try:
+        result = db.rpc("rename_expense_category", {
+            "p_category_id": category_id,
+            "p_user_id": user["id"],
+            "p_household_id": household_id,
+            "p_new_name": name,
+        }).execute().data
+    except Exception as exc:
+        if getattr(exc, "code", None) == "23505":
+            raise HTTPException(409, "That category already exists in this financial space") from exc
+        if getattr(exc, "code", None) == "P0002":
+            raise HTTPException(404, "Category not found") from exc
+        raise
+    if not result:
+        raise HTTPException(404, "Category not found")
+    return result[0]
 
 @router.delete("/categories/{category_id}")
 def delete_category(category_id: str, household_id: str | None = None, user=Depends(current_user)):

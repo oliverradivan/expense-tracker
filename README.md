@@ -18,9 +18,9 @@ The frontend API URL defaults to `http://localhost:8000`. Backend CORS permits t
 
 ## Database setup
 
-Apply migrations in order in the Supabase SQL editor (or through the project's migration process): `001_init.sql`, `002_households.sql`, then `003_custom_categories_frequency.sql`. The second migration adds shared households, invitations, and the exclusive private-or-household transaction owner constraint. It keeps existing private transaction rows and does not reset data. It also installs the account-deletion procedure: private transactions are removed; household transactions and households are retained; when a household owner leaves or deletes their account, the oldest remaining member becomes owner. If an owner deletes their account and no other member remains, the household is retained without a member. The third migration adds user/household scoped custom categories and transaction frequency.
+Apply migrations in order in the Supabase SQL editor (or through the project's migration process): `001_init.sql` through `005_household_integrity.sql`. Migration 002 adds shared households, invitations, and the exclusive private-or-household transaction owner constraint. It keeps existing private transaction rows and does not reset data. It also installs the account-deletion procedure: private transactions are removed; household transactions and households are retained; when a household owner leaves or deletes their account, the oldest remaining member becomes owner. If an owner deletes their account and no other member remains, the household is retained without a member. Migration 003 adds scoped custom categories and transaction frequency; migration 004 adds join requests. Migration 005 atomically creates households and renames categories, and enforces one household membership per user. If it reports existing duplicate memberships, resolve those records before retrying it.
 
-Both migrations enable RLS and deny direct `anon`/`authenticated` table access. The API uses the backend service key and checks the signed user and current household membership before every household read, write, or delete. Run the migrations before registering users or using household features.
+All migrations enable RLS and deny direct `anon`/`authenticated` table access. The API uses the backend service key and checks the signed user and current household membership before every household read, write, or delete. Run the migrations before registering users or using household features. Transaction history is fetched in ordered pages to avoid Supabase's per-request row cap.
 
 ## Main behavior
 
@@ -28,10 +28,10 @@ Both migrations enable RLS and deny direct `anon`/`authenticated` table access. 
 - Private transactions are owned by one user. Household transactions have `user_id = null` and one `household_id`, so the row is shared once among authorized members.
 - Space selection is revalidated against the current memberships at sign-in and refresh. Transaction lists and reports query only the selected space.
 - Categories start with Subscription, Apartment, Grocery, Other for expenses and Job, Maanak, Gift, Other for income. Validation is enforced in both the UI and API.
-- Currency is Israeli shekels. Theme preference is stored locally in the browser.
+- Currency is Israeli shekels. Theme preference is stored locally in the browser. Transaction frequency is descriptive; it does not automatically create future transactions.
 
 ## Checks
 
 Run frontend checks with `cd frontend && npm run lint && npm run build`. Run Python syntax/import checks with `backend/.venv/bin/python -m compileall -q backend` and `backend/.venv/bin/python -c 'import backend.main'`.
 
-The integration script `backend/verify_step4.py` creates and deletes real Supabase accounts and records. Only run it against a disposable test project after configuring the required migration; it does not cover household workflows.
+The integration script `backend/verify_step4.py` creates and deletes real Supabase accounts and records. Only run it against a disposable test project after applying all migrations; it does not cover household workflows. Set `EXPENSE_TRACKER_BASE_URL` when the API is not at `http://localhost:8000`.

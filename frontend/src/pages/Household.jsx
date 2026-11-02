@@ -17,7 +17,7 @@ function SectionHeading({ icon: Icon, title, hint, count, attention }) {
 }
 
 export default function Household() {
-  const { households, invitations, refreshHouseholds } = useAuth()
+  const { households, invitations, householdError, refreshHouseholds } = useAuth()
   const [createName, setCreateName] = useState('')
   const [joinName, setJoinName] = useState('')
   const [inviteNames, setInviteNames] = useState({})
@@ -30,12 +30,27 @@ export default function Household() {
     try {
       const data = await api('/households/join-requests')
       setJoinRequests(data.incoming || [])
-    } catch {
+    } catch (requestError) {
       setJoinRequests([])
+      setError(requestError.message)
     }
   }
 
-  useEffect(() => { void refreshRequests() }, [households.length])
+  useEffect(() => {
+    let active = true
+    api('/households/join-requests')
+      .then((data) => { if (active) setJoinRequests(data.incoming || []) })
+      .catch((requestError) => { if (active) setError(requestError.message) })
+    return () => { active = false }
+  }, [households.length])
+
+  async function retryHouseholdRefresh() {
+    try {
+      await refreshHouseholds()
+    } catch {
+      // The provider exposes the latest error in householdError.
+    }
+  }
 
   async function run(action, successMessage) {
     setError('')
@@ -115,6 +130,7 @@ export default function Household() {
       </div>
     </div>
 
+    {householdError && <p className="notice error-notice" role="alert">{householdError} <button type="button" onClick={retryHouseholdRefresh}>Retry</button></p>}
     {(error || message) && <p className={`notice ${error ? 'error-notice' : 'success-notice'}`} role={error ? 'alert' : 'status'}>{error || <><Check size={15} />{message}</>}</p>}
 
     {!isMember ? <>

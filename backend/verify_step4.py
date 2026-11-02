@@ -10,10 +10,11 @@ Tests:
 """
 import requests
 import json
+import os
 import sys
 import time
 
-BASE_URL = "http://localhost:8000"
+BASE_URL = os.getenv("EXPENSE_TRACKER_BASE_URL", "http://localhost:8000").rstrip("/") + "/api"
 
 def register_user(username, password):
     url = f"{BASE_URL}/auth/register"
@@ -103,7 +104,7 @@ def main():
     # User A creates a transaction
     trans_data = {
         "type": "expense",
-        "category": "grocery",
+        "category": "Grocery",
         "label": "User A's groceries",
         "amount": 50.0,
         "date": "2026-10-14"
@@ -168,11 +169,9 @@ def main():
     
     # Step 5: Test rate limiting on auth endpoints
     print("\n5. Testing rate limiting on auth endpoints...")
-    # We'll try to login 6 times in a row for user A (limit is 5/minute)
-    # We expect the 6th request to return 429.
-    # Note: we need to wait a bit between requests? The limiter is per minute, so we can do them quickly.
+    # One successful login already happened above; the route limit is 10 requests/minute.
     rate_limit_ok = False
-    for i in range(6):
+    for i in range(10):
         resp_login = login_user(user1["username"], user1["password"])
         if resp_login.status_code == 429:
             print(f"Rate limiting triggered on attempt {i+1} (status 429)")
@@ -181,11 +180,10 @@ def main():
         elif resp_login.status_code != 200:
             print(f"Unexpected status during login: {resp_login.status_code}")
             sys.exit(1)
-        # Small delay to avoid overwhelming the server, but not necessary
         time.sleep(0.1)
-    
+
     if not rate_limit_ok:
-        print("Rate limiting was not triggered after 6 login attempts.")
+        print("Rate limiting was not triggered after the expected 11 total login attempts.")
         sys.exit(1)
     
     # Step 6: Clean up test users and data

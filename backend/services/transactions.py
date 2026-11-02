@@ -32,9 +32,24 @@ def infer_category(kind: str, label: str, available: tuple[str, ...] | list[str]
 
 def list_transactions(user_id: str, household_id: str | None = None):
     db = get_supabase()
-    query = db.table("transactions").select("id,user_id,household_id,type,category,label,amount,date,created_at")
-    query = query.eq("household_id", household_id) if household_id else query.eq("user_id", user_id).is_("household_id", "null")
-    return query.order("date", desc=True).order("created_at", desc=True).execute().data
+    page_size = 1000
+    rows = []
+    offset = 0
+    while True:
+        query = db.table("transactions").select("id,user_id,household_id,type,category,label,amount,date,created_at")
+        query = query.eq("household_id", household_id) if household_id else query.eq("user_id", user_id).is_("household_id", "null")
+        page = (
+            query.order("date", desc=True)
+            .order("created_at", desc=True)
+            .order("id", desc=True)
+            .range(offset, offset + page_size - 1)
+            .execute()
+            .data
+        )
+        rows.extend(page)
+        if len(page) < page_size:
+            return rows
+        offset += page_size
 
 def create_transaction(user_id: str, body: dict):
     kind = body.get("type")

@@ -6,7 +6,7 @@ import { AuthFrame } from './login'
 import './register.css'
 
 export default function Register() {
-  const { signUp } = useAuth()
+  const { signUp, authError } = useAuth()
   const nav = useNavigate()
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
@@ -81,9 +81,9 @@ export default function Register() {
           <span className="field-help">At least 7 characters</span>
         </label>
 
-        {error && (
+        {(error || authError) && (
           <p role="alert" className="notice error-notice">
-            {error}
+            {error || authError}
           </p>
         )}
 

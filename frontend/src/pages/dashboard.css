@@ -137,6 +137,8 @@
   white-space: nowrap;
 }
 
+.dashboard-stat-skeleton { grid-column: 2; }
+
 .dashboard-stat-card strong.negative { color: var(--danger); }
 
 .dashboard-stat-card small {
