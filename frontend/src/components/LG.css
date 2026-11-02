@@ -16,12 +16,12 @@
 }
 
 html[data-theme="dark"] {
-  --lg-bright: 1.08;
-  --lg-base: rgb(21 23 24 / 8%);
-  --lg-edge: rgb(255 255 255 / 25%);
-  --lg-rim: inset 1px 1px 1px rgb(255 255 255 / 48%), inset -1px -1px 1px rgb(255 255 255 / 14%), inset 0 0 20px rgb(255 255 255 / 10%);
-  --lg-drop: 0 8px 28px rgb(0 0 0 / 32%);
-  --lg-sheen: linear-gradient(115deg, rgb(255 255 255 / 18%) 0%, rgb(255 255 255 / 6%) 24%, transparent 54%);
+  --lg-fill: var(--surface);
+  --lg-base: transparent;
+  --lg-edge: var(--line);
+  --lg-rim: inset 0 1px 0 rgb(255 255 255 / 5%);
+  --lg-drop: 0 8px 28px rgb(0 0 0 / 28%);
+  --lg-sheen: none;
 }
 
 .lg-defs { position: absolute; width: 0; height: 0; overflow: hidden; pointer-events: none; }
@@ -85,48 +85,6 @@ html[data-theme="dark"] {
     -webkit-backdrop-filter: blur(var(--lg-blur)) saturate(var(--lg-sat)) brightness(var(--lg-bright)) !important;
     backdrop-filter: blur(var(--lg-blur)) saturate(var(--lg-sat)) brightness(var(--lg-bright)) !important;
   }
-}
-
-/* App-wide matte card treatment for dark mode. Keep the canvas dark while
-   giving panels a consistent light surface and readable dark typography. */
-html[data-theme="dark"] {
-  --card-bg: #d1d5d2;
-  --card-ink: #191d1b;
-  --card-muted: #535b57;
-  --card-line: #bfc6c1;
-}
-
-html[data-theme="dark"] :is(
-  .glass,
-  .glass-panel,
-  .glass-chip,
-  .glass-control,
-  .glass-bar,
-  .dashboard-stat-card,
-  .settings-category-row,
-  .new-category-box
-) {
-  --bg: var(--card-bg) !important;
-  --surface: var(--card-bg) !important;
-  --ink: var(--card-ink) !important;
-  --muted: var(--card-muted) !important;
-  --line: var(--card-line) !important;
-  --accent: #262b28 !important;
-  --accent-soft: #e1e5e2 !important;
-  --danger: #b42332 !important;
-  --danger-soft: #f9e7e9 !important;
-  --income: #16834a !important;
-  --income-soft: #e2eee6 !important;
-  --warm: #454c48 !important;
-  --glass-fill: var(--card-bg) !important;
-  --glass-border: var(--card-line) !important;
-  --glass-shadow: 0 8px 24px rgb(0 0 0 / 22%) !important;
-  color: var(--card-ink) !important;
-  border-color: var(--card-line) !important;
-  background: var(--card-bg) !important;
-  box-shadow: 0 8px 24px rgb(0 0 0 / 22%) !important;
-  -webkit-backdrop-filter: none !important;
-  backdrop-filter: none !important;
 }
 
 html[data-theme="dark"] :is(.glass-panel, .glass)::before {

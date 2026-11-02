@@ -32,3 +32,5 @@
 }
 
 .nav-no-active .nav-slider{opacity:0}
+
+html[data-theme="dark"] .bottom-nav{--glass-fill:var(--surface-elevated);--glass-border:var(--line)}

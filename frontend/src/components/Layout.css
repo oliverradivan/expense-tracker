@@ -50,6 +50,11 @@
   will-change: transform;
 }
 
+html[data-theme="dark"] .settings-slide-layer,
+html[data-theme="dark"] .logout-login-base {
+  background: var(--surface-elevated);
+}
+
 .settings-slide-content {
   min-height: 100vh;
 }

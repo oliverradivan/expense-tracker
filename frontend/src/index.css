@@ -29,22 +29,23 @@
 
 html[data-theme="dark"] {
   color-scheme: dark;
-  --bg: #101214;
-  --page-background-expense: #171719;
-  --page-background-income: #141916;
-  --surface: #191c1e;
+  --bg: #000000;
+  --page-background-expense: var(--bg);
+  --page-background-income: var(--bg);
+  --surface: #161618;
+  --surface-elevated: #232326;
   --ink: #e7e9e8;
   --muted: #a0a5a3;
-  --line: #2a2f31;
+  --line: #343438;
   --accent: #e7e9e8;
-  --accent-soft: #24292b;
+  --accent-soft: #2c2c2e;
   --warm: #c6cbc8;
   --danger: #ff737d;
   --danger-soft: #301b1e;
   --income: #69d69a;
   --income-soft: #172920;
-  --glass-fill: var(--lg-fill);
-  --glass-border: var(--lg-edge);
+  --glass-fill: var(--surface);
+  --glass-border: var(--line);
   --glass-shadow: var(--lg-drop);
   --shadow: 0 12px 32px rgb(0 0 0 / 28%);
 }
