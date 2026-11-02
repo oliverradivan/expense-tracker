@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { ArrowDownRight, ArrowUpRight, Wallet } from 'lucide-react'
+import { ArrowDownRight, ArrowUpRight, Settings, Wallet } from 'lucide-react'
 import { useAuth } from '../context/authContext'
-import CoinIcon from '../components/CoinIcon'
+import AnimatedNumber from '../components/AnimatedNumber'
 import Skeleton from '../components/Skeleton'
 import { api } from '../lib/api'
 import { getCachedTransactions, setCachedTransactions } from '../lib/transactionCache'
@@ -87,7 +87,7 @@ export default function Dashboard() {
     <section className="page dashboard-page">
       <div className="dashboard-topbar">
         <Link to="/settings" className="dashboard-settings-coin" aria-label="Open settings" title="Settings">
-          <span className="brand-mark"><CoinIcon size={28} /></span>
+          <span className="brand-mark"><Settings size={25} strokeWidth={1.8} /></span>
         </Link>
         <div className="page-kicker"><span className="kicker-dot" /> {today.toUpperCase()}</div>
       </div>
@@ -103,19 +103,19 @@ export default function Dashboard() {
         <div className="dashboard-stat-card">
           <span className="dashboard-stat-icon income"><ArrowUpRight size={17} aria-hidden="true" /></span>
           <span className="dashboard-stat-label">INCOME</span>
-          {statsReady ? <strong>{money(income)}</strong> : <Skeleton className="dashboard-stat-skeleton" style={{ width: '76%', height: 22 }} />}
+          {statsReady ? <strong><AnimatedNumber value={income} format={money} /></strong> : <Skeleton className="dashboard-stat-skeleton" style={{ width: '76%', height: 22 }} />}
           <small>This month</small>
         </div>
         <div className="dashboard-stat-card">
           <span className="dashboard-stat-icon expense"><ArrowDownRight size={17} aria-hidden="true" /></span>
           <span className="dashboard-stat-label">SPENT</span>
-          {statsReady ? <strong>{money(expenses)}</strong> : <Skeleton className="dashboard-stat-skeleton" style={{ width: '70%', height: 22 }} />}
+          {statsReady ? <strong><AnimatedNumber value={expenses} format={money} /></strong> : <Skeleton className="dashboard-stat-skeleton" style={{ width: '70%', height: 22 }} />}
           <small>This month</small>
         </div>
         <div className="dashboard-stat-card">
           <span className="dashboard-stat-icon net"><Wallet size={16} aria-hidden="true" /></span>
           <span className="dashboard-stat-label">NET</span>
-          {statsReady ? <strong className={net < 0 ? 'negative' : ''}>{money(net)}</strong> : <Skeleton className="dashboard-stat-skeleton" style={{ width: '68%', height: 22 }} />}
+          {statsReady ? <strong className={net < 0 ? 'negative' : ''}><AnimatedNumber value={net} format={money} /></strong> : <Skeleton className="dashboard-stat-skeleton" style={{ width: '68%', height: 22 }} />}
           <small>Income minus spending</small>
         </div>
       </section>

@@ -251,6 +251,7 @@
 }
 
 .coin-glyph {
+  transform: translateY(-2px);
   font-family: 'Playfair Display', Georgia, serif;
   font-size: 46px;
   line-height: 1;

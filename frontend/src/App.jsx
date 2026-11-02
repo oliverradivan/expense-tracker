@@ -30,13 +30,12 @@ export default function App() {
 
   useEffect(() => { const timer = setTimeout(() => setIntroComplete(true), 620); return () => clearTimeout(timer) }, [])
 
-  // Hand the startup coin off to the Dashboard settings link once it exists.
+  // Hand the startup coin off to the Dashboard's central action coin once it exists.
   useLayoutEffect(() => {
     if (!ready || splashGone) return
     const splash = splashRef.current
     const mark = markRef.current
-    const brand = document.querySelector('.dashboard-settings-coin .brand-mark')
-    const target = brand ? (brand.firstElementChild || brand) : null
+    const target = document.querySelector('.start-card .coin')
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     if (!splash || !mark || !target || reduceMotion) {
       const timer = window.setTimeout(() => setSplashGone(true), 0)

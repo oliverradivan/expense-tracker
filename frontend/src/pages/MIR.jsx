@@ -4,6 +4,7 @@ import { api } from '../lib/api'
 import { money, monthLabel } from '../lib/utils'
 import { getCachedTransactions, setCachedTransactions } from '../lib/transactionCache'
 import { useAuth } from '../context/authContext'
+import AnimatedNumber from '../components/AnimatedNumber'
 import Skeleton from '../components/Skeleton'
 import './MIR.css'
 
@@ -20,7 +21,7 @@ const byCategory = (rows) => rows.filter(row => row.type === 'expense').reduce((
 const changeLabel = (current, previous) => {
   const delta = current - previous
   if (!delta) return 'No change from last month'
-  return `${delta > 0 ? '+' : '−'}${money(Math.abs(delta) / 100)} vs last month`
+  return <>{delta > 0 ? '+' : '−'}<AnimatedNumber value={Math.abs(delta) / 100} format={money} /> vs last month</>
 }
 
 export default function MIR() {
@@ -86,17 +87,17 @@ export default function MIR() {
         {[0, 1].map((item) => <div className="analytics-card glass-panel" key={item}><Skeleton style={{ width: 135, height: 16 }} /><Skeleton style={{ width: '100%', height: 145, marginTop: 22 }} /></div>)}
       </div>
     </div> : <>
-      <div className="review-summary glass-panel"><span className="eyebrow">PROFIT / LOSS · {monthLabel(month).toUpperCase()}</span><strong className={income - expenses < 0 ? 'negative' : ''}>{money((income - expenses) / 100)}</strong><span>Income less expenses · {changeLabel(income - expenses, priorIncome - priorExpenses)}</span></div>
+      <div className="review-summary glass-panel"><span className="eyebrow">PROFIT / LOSS · {monthLabel(month).toUpperCase()}</span><strong className={income - expenses < 0 ? 'negative' : ''}><AnimatedNumber value={(income - expenses) / 100} format={money} /></strong><span>Income less expenses · {changeLabel(income - expenses, priorIncome - priorExpenses)}</span></div>
       <div className="review-cards">
-        <article className="review-card glass-panel"><span className="metric-icon income-icon"><ArrowUpRight size={18}/></span><span className="eyebrow">TOTAL INCOME</span><strong>{money(income / 100)}</strong><span>{current.filter(row => row.type === 'income').length} entries · {changeLabel(income, priorIncome)}</span></article>
-        <article className="review-card glass-panel"><span className="metric-icon expense-icon"><ArrowDownRight size={18}/></span><span className="eyebrow">TOTAL EXPENSES</span><strong>{money(expenses / 100)}</strong><span>{current.filter(row => row.type === 'expense').length} entries · {changeLabel(expenses, priorExpenses)}</span></article>
+        <article className="review-card glass-panel"><span className="metric-icon income-icon"><ArrowUpRight size={18}/></span><span className="eyebrow">TOTAL INCOME</span><strong><AnimatedNumber value={income / 100} format={money} /></strong><span><AnimatedNumber value={current.filter(row => row.type === 'income').length} /> entries · {changeLabel(income, priorIncome)}</span></article>
+        <article className="review-card glass-panel"><span className="metric-icon expense-icon"><ArrowDownRight size={18}/></span><span className="eyebrow">TOTAL EXPENSES</span><strong><AnimatedNumber value={expenses / 100} format={money} /></strong><span><AnimatedNumber value={current.filter(row => row.type === 'expense').length} /> entries · {changeLabel(expenses, priorExpenses)}</span></article>
       </div>
       <div className="analytics-grid">
-        <section className="analytics-card glass-panel"><div className="analytics-title"><div><span className="eyebrow">SIDE BY SIDE</span><h2>Income & expenses</h2></div><ChartNoAxesColumnIncreasing size={19}/></div><div className="bar-chart"><div className="bar-column"><strong>{money(income / 100)}</strong><div className="bar-track"><span className="bar-fill income-fill" style={{ height: `${Math.max(income / max * 100, income ? 5 : 0)}%` }}/></div><span>Income</span></div><div className="bar-column"><strong>{money(expenses / 100)}</strong><div className="bar-track"><span className="bar-fill expense-fill" style={{ height: `${Math.max(expenses / max * 100, expenses ? 5 : 0)}%` }}/></div><span>Expenses</span></div></div></section>
+        <section className="analytics-card glass-panel"><div className="analytics-title"><div><span className="eyebrow">SIDE BY SIDE</span><h2>Income & expenses</h2></div><ChartNoAxesColumnIncreasing size={19}/></div><div className="bar-chart"><div className="bar-column"><strong><AnimatedNumber value={income / 100} format={money} /></strong><div className="bar-track"><span className="bar-fill income-fill" style={{ height: `${Math.max(income / max * 100, income ? 5 : 0)}%` }}/></div><span>Income</span></div><div className="bar-column"><strong><AnimatedNumber value={expenses / 100} format={money} /></strong><div className="bar-track"><span className="bar-fill expense-fill" style={{ height: `${Math.max(expenses / max * 100, expenses ? 5 : 0)}%` }}/></div><span>Expenses</span></div></div></section>
         <section className="analytics-card glass-panel category-card"><span className="eyebrow">WHERE IT WENT</span><h2>Expense categories</h2>{categoryNames.length ? categoryNames.map(name => {
           const amount = categories[name] || 0
           const previousAmount = priorCategories[name] || 0
-          return <div className="category-row" key={name}><div><span>{name}</span><strong>{money(amount / 100)}</strong></div><span className="category-meter"><i style={{ width: `${expenses ? amount / expenses * 100 : 0}%` }}/></span><small className="category-comparison">{changeLabel(amount, previousAmount)}</small></div>
+          return <div className="category-row" key={name}><div><span>{name}</span><strong><AnimatedNumber value={amount / 100} format={money} /></strong></div><span className="category-meter"><i style={{ width: `${expenses ? amount / expenses * 100 : 0}%` }}/></span><small className="category-comparison">{changeLabel(amount, previousAmount)}</small></div>
         }) : <div className="category-empty">No expenses recorded for {monthLabel(month)}.</div>}</section>
       </div>
       <p className="review-comparison-note">Compared with {monthLabel(previousMonth)}.</p>
