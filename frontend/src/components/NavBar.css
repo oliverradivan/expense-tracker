@@ -9,6 +9,11 @@
 .nav-add .nav-label{color:var(--ink);font-weight:700}
 .nav-add.active .nav-icon{transform:translateY(-2px) scale(1.04)}
 
+html[data-theme="dark"] .nav-slider{background:color-mix(in srgb,var(--accent) 15%,transparent);box-shadow:inset 0 1px 0 rgb(237 154 85 / 16%)}
+html[data-theme="dark"] .nav-item.active{color:var(--accent)}
+html[data-theme="dark"] .nav-add .nav-icon{background:var(--accent-metal);color:#24170e;box-shadow:0 5px 15px rgb(183 91 37 / 24%)}
+html[data-theme="dark"] .nav-add .nav-label{color:var(--accent)}
+
 @media(min-width:900px){
   .bottom-nav{width:min(840px,calc(100vw - 100px));height:82px;bottom:28px;padding-inline:10px;--lg-corner-radius:27px;border-radius:var(--lg-corner-radius)}
   .nav-slider{top:7px;bottom:7px;left:10px;width:calc((100% - 20px)/6);border-radius:20px}

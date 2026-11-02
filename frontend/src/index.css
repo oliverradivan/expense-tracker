@@ -29,17 +29,18 @@
 
 html[data-theme="dark"] {
   color-scheme: dark;
-  --bg: #000000;
-  --page-background-expense: var(--bg);
-  --page-background-income: var(--bg);
-  --surface: #161618;
-  --surface-elevated: #232326;
+  --bg: #11100f;
+  --page-background-expense: #15110e;
+  --page-background-income: #11130f;
+  --surface: #1b1917;
+  --surface-elevated: #282421;
   --ink: #e7e9e8;
   --muted: #a0a5a3;
-  --line: #343438;
-  --accent: #e7e9e8;
-  --accent-soft: #2c2c2e;
-  --warm: #c6cbc8;
+  --line: #3a3530;
+  --accent: #ed9a55;
+  --accent-soft: #39291e;
+  --accent-metal: linear-gradient(135deg, #f3bb79 0%, #d97938 48%, #efa05e 100%);
+  --warm: #e8b17c;
   --danger: #ff737d;
   --danger-soft: #301b1e;
   --income: #69d69a;

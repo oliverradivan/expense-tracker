@@ -397,6 +397,23 @@
   background: var(--accent-soft);
 }
 
+html[data-theme="dark"] .page h1 em,
+html[data-theme="dark"] .heading-period,
+html[data-theme="dark"] .wordmark-dot,
+html[data-theme="dark"] .kicker-dot {
+  color: var(--accent);
+}
+
+html[data-theme="dark"] .kicker-dot {
+  background: var(--accent-metal);
+}
+
+html[data-theme="dark"] .primary-button {
+  background: var(--accent-metal);
+  color: #24170e;
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 28%), 0 5px 16px rgb(183 91 37 / 18%);
+}
+
 .brand-mark {
   background: var(--surface);
   color: var(--ink);
