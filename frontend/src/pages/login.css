@@ -173,6 +173,23 @@
   letter-spacing: .03em;
 }
 
+html[data-theme="dark"] .auth-screen {
+  background: var(--bg);
+}
+
+html[data-theme="dark"] .auth-screen .auth-panel {
+  --glass-fill: var(--surface);
+  background: var(--surface) !important;
+  border-color: var(--line);
+  box-shadow: var(--shadow);
+}
+
+html[data-theme="dark"] .auth-form input {
+  background: var(--surface-elevated);
+  border-color: var(--line);
+  color: var(--ink);
+}
+
 @media (max-width: 480px) {
   .auth-screen .auth-panel {
     padding: 29px 23px;
